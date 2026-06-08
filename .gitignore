@@ -16,7 +16,7 @@
 *.dylib
 *.dll
 
-# Fortran module files
+# Fortran module files 
 *.mod
 *.smod
 
@@ -31,5 +31,8 @@
 *.out
 *.app
 
-/build
+build/
 .vscode
+bin/
+out/
+CMakeSettings.json
