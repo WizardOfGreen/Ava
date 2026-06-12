@@ -1,7 +1,7 @@
 #ifndef MATRIX_CPP
 #define MATRIX_CPP
 
-#include "inc/Matrix.h"
+#include "Matrix.h"
 
 template class Matrix<float>;
 template class Matrix<int>;
