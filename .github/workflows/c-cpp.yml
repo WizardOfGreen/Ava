@@ -2,17 +2,17 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
+      branches:
+        - main
 
 jobs:
-  build-project:
-    name: Build Project
-    runs-on: ubuntu-24.00
+  build-mac:
+    runs-on: macos-latest
+
     steps:
-      - name: Checkout Project
-        uses: actions/checkout@v4.2.2
-        
-      - name: Build Project
-        uses: thereeal/cmake-action@v2.1.0
+      - name: Checkout repository
+      uses: actions/checkout@v2
+      with: 
+        submodules: recursive
+      - name: Install dependancies
+        run: brew install cmake gtk+3
