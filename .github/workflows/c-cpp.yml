@@ -41,11 +41,11 @@ jobs:
 
       - name : Zip the Folder
         run : |
-          Compress-Archive -Path "Build\${{env.project_name}}_artefacts\Release\VST3\${{env.project_name}}.vst3" -DestinationPath "Build\${{env.project_name}}.zip"
+          Compress-Archive -Path "build" -DestinationPath .
         shell : pwsh
 
       - name : Upload Installer Artifact 
         uses : actions/upload-artifact@v4 
         with : 
           name : ${{env.project_name}}-Windows-Installer-VST3 
-          path : Build\${{env.project_name}}_artefacts\Release\VST3\
+          path : build
