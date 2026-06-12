@@ -6,13 +6,49 @@ on:
         - main
 
 jobs:
-  build-mac:
-    runs-on: macos-latest
+  build-windows:
+    runs-on: windows-latest
 
     steps:
-      - name: Checkout repository
-      uses: actions/checkout@v2
-      with: 
-        submodules: recursive
+      - name : Checkout repository
+        uses : actions/checkout@v2
+        with :
+          submodules : recursive
+
+      - name : Setup Visual Studio
+        uses :  microsoft/setup-msbuild@v1.1
+        with:
+          msbuild-architecture: 'x64'
+
+      - name: Install Windows SDK
+        run : |
+          choco install windows-sdk-10.1
+
       - name: Install dependancies
-        run: brew install cmake gtk+3
+        run : |
+          choco install cmake
+
+      - name: Clear CMake build directories
+        run : |
+          if (Test-Path Build)
+          {
+            Remove-Item Build -Recurse -Force
+          }  
+      - name : Configure CMAKE
+        run : |
+          cmake -B Build -D CMAKE_BUILD_TYPE=Release -D CMAKE_GENERATOR_PLATFORM=x64
+
+      - name : Build
+        run : |
+          cmake --build Build --config Release
+
+      - name : Zip the Folder
+        run : |
+          Compress-Archive -Path "Build\${{env.project_name}}_artefacts\Release\VST3\${{env.project_name}}.vst3" 
+        shell : pwsh
+
+      - name : Upload Installer Artifact 
+        uses : actions/upload-artifact@v4 
+        with : 
+          name : ${{env.project_name}}-Windows-Installer-VST3 
+          path : Build\${{env.project_name}}_artefacts\Release\VST3\
