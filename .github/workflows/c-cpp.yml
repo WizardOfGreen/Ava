@@ -41,7 +41,7 @@ jobs:
 
       - name : Zip the Folder
         run : |
-          Compress-Archive -Path "Build\${{env.project_name}}_artefacts\Release\VST3\${{env.project_name}}.vst3" -DestinationPath "Dest\${{env.project_name}}.zip"
+          Compress-Archive -Path "Build\${{env.project_name}}_artefacts\Release\VST3\${{env.project_name}}.vst3" -DestinationPath "Build\${{env.project_name}}.zip"
         shell : pwsh
 
       - name : Upload Installer Artifact 
