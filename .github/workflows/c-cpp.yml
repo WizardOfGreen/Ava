@@ -37,7 +37,7 @@ jobs:
   
       - name : Build
         run : |
-          cmake --build Build --config Release
+          cmake -S . -B build -G "MinGW Makefiles"
 
       - name : Zip the Folder
         run : |
