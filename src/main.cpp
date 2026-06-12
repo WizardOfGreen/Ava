@@ -24,4 +24,4 @@ int main()
     std::cout << "Program Ran to Completion\n";
     system("pause");
     return 0;
-}
+} 
