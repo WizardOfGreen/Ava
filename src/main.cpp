@@ -9,7 +9,7 @@ Perceptron P;
 
 void runEpoch(std::vector<double> inp , double out)
 {
-    P.setInpAW(inp) ; 
+    P.setInp(inp) ; 
     P.activatePerc() ; 
     P.learnPerc(out) ; 
 }
@@ -18,7 +18,7 @@ int main()
 {
     P.setActFunc(new StepFunc());
 
-    int epoch = 100;
+    int epoch = 1000 ;
 
     std::vector<std::vector<double>> inputs = {
         {0, 0},
@@ -26,7 +26,7 @@ int main()
         {1, 0},
         {1, 1}};
 
-    std::vector<double> outp = {0, 0, 0, 1};
+    std::vector<double> outp = {1,1,1,0};
 
     for ( int i = 0 ; i < epoch ; i++)
     {
@@ -39,8 +39,23 @@ int main()
     P.printWeights() ; 
     std::cout << std::endl ; 
 
-    std::vector<double> inp = {0 ,0 } ; 
-    P.setInpAW(inp) ; 
+    std::vector<double> inp = {0 ,0} ; 
+    P.setInp(inp) ; 
+    P.activatePerc() ; 
+    P.printOut() ; 
+
+    inp = {0 ,1} ; 
+    P.setInp(inp) ; 
+    P.activatePerc() ; 
+    P.printOut() ; 
+
+    inp = {1 ,0} ; 
+    P.setInp(inp) ; 
+    P.activatePerc() ; 
+    P.printOut() ; 
+
+    inp = {1,1} ; 
+    P.setInp(inp) ; 
     P.activatePerc() ; 
     P.printOut() ; 
 

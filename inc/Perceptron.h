@@ -11,17 +11,14 @@ private:
     ActivationFunction * act ;
 
     int numInputs = 0 ;
-
-    double biasWeight = 0 ;
-    double biasInput = 1 ; 
+    double bias = 1 ;
 
     std::vector<double> Inputs ; 
     std::vector<double> Weights ; 
 
     double Outputs ;
-    double ActRes ; 
 
-    double rate = 0.01 ; 
+    double rate = 0.05 ; 
 
 public:
     Perceptron();
@@ -32,7 +29,7 @@ public:
     double activatePerc() ;
     void learnPerc(double trueVal) ; 
 
-    void setInpAW(const std::vector<double>& inp) ; 
+    void setInp(const std::vector<double>& inp) ; 
     void setBias(const double w ) ; 
 
     void testFunc() {
@@ -45,7 +42,7 @@ public:
             std::cout << x << " " ; 
         }
         std::cout << std::endl ; 
-        std::cout << this->biasWeight << std::endl ; 
+        std::cout << this->bias << std::endl ; 
     }
 
     void printOut() {
