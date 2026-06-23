@@ -2,26 +2,27 @@
 #include <string>
 
 #include "Matrix.h"
+#include "ActFunctions.h"
+#include "Perceptron.h"
 
 int main()
 {
-    Matrix<double> M ;
-    std::vector<std::vector<std::string>> data;
 
-    std::vector<std::vector<double>> a = {
-        {4, 3, 8},
-        {6, 2, 5},
-        {1, 5, 8}}; 
+    Perceptron P  ;
+    P.setActFunc( new StepFunc() ) ;
+    P.testFunc() ;
 
-    std::vector<std::vector<double>> c ; 
-    std::vector<std::vector<double>> b = M.Inverse(a) ;
+    int epoch = 10 ;  
 
-    M.printMatrixes(a) ;
-    M.printMatrixes(b) ; 
+    std::vector<double> case1 = { 0 , 0 } ;  
+    std::vector<double> case2 = { 0 , 1 } ;  
+    std::vector<double> case3 = { 1 , 0 } ;  
+    std::vector<double> case4 = { 1 , 1 } ;  
 
-    M.printMatrixes(M.MultiplyMatrix(a,b)) ; 
+
 
     std::cout << "Program Ran to Completion\n";
     system("pause");
+    system("cls") ; 
     return 0;
 } 
