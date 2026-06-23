@@ -32,11 +32,24 @@ public:
     double activatePerc() ;
     void learnPerc(double trueVal) ; 
 
-    void setInpAW(const std::vector<double>& inp , const std::vector<double>& w) ; 
+    void setInpAW(const std::vector<double>& inp) ; 
     void setBias(const double w ) ; 
 
     void testFunc() {
         std::cout << act->activate(3) << std::endl  ;  
+    }
+
+    void printWeights() {
+        for ( double x : Weights)
+        {
+            std::cout << x << " " ; 
+        }
+        std::cout << std::endl ; 
+        std::cout << this->biasWeight << std::endl ; 
+    }
+
+    void printOut() {
+        std::cout << this->Outputs << std::endl ; 
     }
 };
 

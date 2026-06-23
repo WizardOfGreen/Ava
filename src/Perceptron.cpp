@@ -43,20 +43,19 @@ void Perceptron::learnPerc(double trueVal)
     {
         this->Weights[i] += err ; 
     }
-    this->biasInput += err ; 
+    this->biasWeight += err ; 
 }
 
-void Perceptron::setInpAW(const std::vector<double>& inp, const std::vector<double>& w)
+void Perceptron::setInpAW(const std::vector<double>& inp)
 {
+    this->Inputs.clear() ;
+    this->Weights.clear() ; 
+    
     this->numInputs = inp.capacity() ;
     for ( double x : inp )
     {
         this->Inputs.push_back(x) ; 
-    }
-
-    for ( double x : w )
-    {
-        this->Weights.push_back(x) ; 
+        this->Weights.push_back(0) ; 
     }
 }
 

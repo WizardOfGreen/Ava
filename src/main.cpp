@@ -5,24 +5,48 @@
 #include "ActFunctions.h"
 #include "Perceptron.h"
 
+Perceptron P;
+
+void runEpoch(std::vector<double> inp , double out)
+{
+    P.setInpAW(inp) ; 
+    P.activatePerc() ; 
+    P.learnPerc(out) ; 
+}
+
 int main()
 {
+    P.setActFunc(new StepFunc());
 
-    Perceptron P  ;
-    P.setActFunc( new StepFunc() ) ;
-    P.testFunc() ;
+    int epoch = 100;
 
-    int epoch = 10 ;  
+    std::vector<std::vector<double>> inputs = {
+        {0, 0},
+        {0, 1},
+        {1, 0},
+        {1, 1}};
 
-    std::vector<double> case1 = { 0 , 0 } ;  
-    std::vector<double> case2 = { 0 , 1 } ;  
-    std::vector<double> case3 = { 1 , 0 } ;  
-    std::vector<double> case4 = { 1 , 1 } ;  
+    std::vector<double> outp = {0, 0, 0, 1};
 
+    for ( int i = 0 ; i < epoch ; i++)
+    {
+        for ( int j = 0 ; j < 4 ; j++)
+        {
+            runEpoch(inputs[j] , outp[j]) ; 
+        }
+    }
 
+    P.printWeights() ; 
+    std::cout << std::endl ; 
 
-    std::cout << "Program Ran to Completion\n";
+    std::vector<double> inp = {0 ,0 } ; 
+    P.setInpAW(inp) ; 
+    P.activatePerc() ; 
+    P.printOut() ; 
+
+    std::cout
+        << "Program Ran to Completion\n";
     system("pause");
-    system("cls") ; 
+    system("cls");
     return 0;
-} 
+}
