@@ -8,46 +8,71 @@
 class Perceptron
 {
 private:
-    ActivationFunction * act ;
+    ActivationFunction *act;
 
-    int numInputs = 0 ;
-    double bias = 1 ;
+    int numInputs = 0;
+    double bias = 1;
 
-    std::vector<double> Inputs ; 
-    std::vector<double> Weights ; 
+    std::vector<double> Inputs;
+    std::vector<double> Weights;
 
-    double Outputs ;
+    double Outputs;
 
-    double rate = 0.05 ; 
+    double rate = 0.05;
 
 public:
     Perceptron();
+    Perceptron(ActivationFunction *act);
     ~Perceptron();
 
-    void setActFunc(ActivationFunction * a ) ;
-    double CalcY() ;
+    void setActFunc(ActivationFunction *a);
+    double CalcY();
 
-    void setInp(const std::vector<double>& inp) ; 
-    void setWeights() ; 
-    void setBias(const double w ) ; 
-
-    void TrainPerceptron(std::vector<double> inp , double out) ; 
-
-    void testFunc() {
-        std::cout << act->activate(3) << std::endl  ;  
+    void printY()
+    {
+        std::cout << this->Outputs << std::endl;
+    }
+    void printAct()
+    {
+        std::cout << act->activate(this->Outputs) << std::endl;
     }
 
-    void printWeights() {
-        for ( double x : Weights)
+    void printInp() 
+    {
+         std::cout << "INPUTS\n" ;
+        for ( double d : this->Inputs )
         {
-            std::cout << x << " " ; 
+            std::cout << d << " " ; 
         }
         std::cout << std::endl ; 
-        std::cout << this->bias << std::endl ; 
+
     }
 
-    void printOut() {
-        std::cout << this->Outputs << std::endl ; 
+    void setInp(const std::vector<double> &inp);
+    void setWeights();
+    void setWeights(std::vector<double> w);
+    void setBias(const double b);
+
+    void TrainPerceptron(std::vector<double> inp, double out);
+
+    void testFunc()
+    {
+        std::cout << act->activate(3) << std::endl;
+    }
+
+    void printWeights()
+    {
+        for (double x : Weights)
+        {
+            std::cout << x << " ";
+        }
+        std::cout << std::endl;
+        std::cout << this->bias << std::endl;
+    }
+
+    void printOut()
+    {
+        std::cout << this->Outputs << std::endl;
     }
 };
 

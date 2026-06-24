@@ -7,6 +7,11 @@ Perceptron::Perceptron()
 {
 }
 
+Perceptron::Perceptron(ActivationFunction *act)
+{
+    this->act = act ; 
+}
+
 Perceptron::~Perceptron()
 {
 }
@@ -24,9 +29,9 @@ double Perceptron::CalcY()
     {
         res = res + this->Inputs[i] * this->Weights[i];
     }
-    this->Outputs = this->act->activate(res);
+    this->Outputs = (res);
 
-    return res;
+    return this->act->activate(res) ;
 }
 
 void Perceptron::setInp(const std::vector<double> &inp)
@@ -50,15 +55,19 @@ void Perceptron::setWeights()
     {
         this->Weights.push_back(1);
     }
-
-    std::cout << "\nThis should only run once\n";
-    std::cout << "Weights Amount : " << this->Weights.size() << std::endl;
-    std::cout << std::endl;
 }
 
-void Perceptron::setBias(const double w)
+void Perceptron::setWeights(std::vector<double> w)
 {
-    this->bias = w;
+    for ( double x: w)
+    {
+        this->Weights.push_back(x) ; 
+    }
+}
+
+void Perceptron::setBias(const double b)
+{
+    this->bias = b;
 }
 
 void Perceptron::TrainPerceptron(std::vector<double> inp, double out)
