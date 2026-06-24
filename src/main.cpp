@@ -46,6 +46,15 @@ void XORSolved()
     }
 }
 
+void XORTraining()
+{
+    NeuralNetwork N;
+    std::vector<std::vector<double>> inp = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
+    std::vector<std::vector<double>> out = {{0}, {1}, {1}, {0}};
+    N.addLayer(2, new Sigmoid());
+    N.addLayer(1, new Sigmoid());
+}
+
 int main()
 {
     XORSolved();

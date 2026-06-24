@@ -30,10 +30,6 @@ public:
 
     void printY()
     {
-        std::cout << this->Outputs << std::endl;
-    }
-    void printAct()
-    {
         std::cout << act->activate(this->Outputs) << std::endl;
     }
 
@@ -53,27 +49,10 @@ public:
     void setWeights(std::vector<double> w);
     void setBias(const double b);
 
-    void TrainPerceptron(std::vector<double> inp, double out);
+    void TrainPerceptron(std::vector<double> inp, double out) ; 
+    std::vector<double> returnWeights() ; 
 
-    void testFunc()
-    {
-        std::cout << act->activate(3) << std::endl;
-    }
 
-    void printWeights()
-    {
-        for (double x : Weights)
-        {
-            std::cout << x << " ";
-        }
-        std::cout << std::endl;
-        std::cout << this->bias << std::endl;
-    }
-
-    void printOut()
-    {
-        std::cout << this->Outputs << std::endl;
-    }
 };
 
 #endif

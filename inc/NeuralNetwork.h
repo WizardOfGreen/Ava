@@ -14,7 +14,6 @@ private:
 
 public:
     NeuralNetwork();
-    NeuralNetwork(ActivationFunction *act);
     ~NeuralNetwork();
 
     void setInputsLayer(const std::vector<double> &Inp);
@@ -23,6 +22,8 @@ public:
 
     std::vector<double> CalcLayerOutputs(int index);
     void PassThrough();
+
+    void TrainNN(std::vector<std::vector<double>> inp , std::vector<std::vector<double>> out , int epoch ) ; 
 
     std::vector<double> getOutputs() ; 
 

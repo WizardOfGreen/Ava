@@ -106,4 +106,9 @@ void Perceptron::TrainPerceptron(std::vector<double> inp, double out)
     this->bias = this->bias + err * rate * 1;
 }
 
+std::vector<double> Perceptron::returnWeights()
+{
+    return this->Weights ;
+}
+
 #endif
