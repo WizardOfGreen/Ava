@@ -17,7 +17,6 @@ private:
     std::vector<double> Weights ; 
 
     double Outputs ;
-    double ActAmount ; 
 
     double rate = 0.05 ; 
 
@@ -27,12 +26,12 @@ public:
 
     void setActFunc(ActivationFunction * a ) ;
     double CalcY() ;
-    double activatePerc() ;
-    void learnPerc(double trueVal) ; 
 
     void setInp(const std::vector<double>& inp) ; 
     void setWeights() ; 
     void setBias(const double w ) ; 
+
+    void TrainPerceptron(std::vector<double> inp , double out) ; 
 
     void testFunc() {
         std::cout << act->activate(3) << std::endl  ;  
