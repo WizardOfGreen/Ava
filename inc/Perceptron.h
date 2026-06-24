@@ -17,6 +17,7 @@ private:
     std::vector<double> Weights ; 
 
     double Outputs ;
+    double ActAmount ; 
 
     double rate = 0.05 ; 
 
@@ -30,6 +31,7 @@ public:
     void learnPerc(double trueVal) ; 
 
     void setInp(const std::vector<double>& inp) ; 
+    void setWeights() ; 
     void setBias(const double w ) ; 
 
     void testFunc() {

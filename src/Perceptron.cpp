@@ -30,17 +30,17 @@ double Perceptron::CalcY()
 
 double Perceptron::activatePerc()
 {
-    this->CalcY();
-    this->Outputs = this->act->activate(this->Outputs);
-    return this->Outputs;
+    this->ActAmount = this->act->activate(this->CalcY());
+    return this->ActAmount;
 }
 
 void Perceptron::learnPerc(double trueVal)
 {
-    if (Outputs == 0)
+    double err = trueVal - (this->activatePerc()) ;
+
+    if (err == 0)
         return;
 
-    double err = trueVal - this->Outputs;
     for (int i = 0; i < this->Inputs.size(); i++)
     {
         this->Weights[i] = this->Weights[i] + rate * err * this->Inputs[i];
@@ -51,14 +51,27 @@ void Perceptron::learnPerc(double trueVal)
 void Perceptron::setInp(const std::vector<double> &inp)
 {
     this->Inputs.clear();
-    this->Weights.clear();
 
     this->numInputs = inp.capacity();
     for (double x : inp)
     {
         this->Inputs.push_back(x);
+    }
+
+    if (this->Inputs.size() > this->Weights.size())
+        this->setWeights();
+}
+
+void Perceptron::setWeights()
+{
+    this->Weights.clear() ;
+    while (this->Weights.size() < this->Inputs.size())
+    {
         this->Weights.push_back(1);
     }
+
+    std::cout << "This should only run once\n" ; 
+    std::cout << "Weights Amount : " << this->Weights.size() << std::endl ; 
 }
 
 void Perceptron::setBias(const double w)
