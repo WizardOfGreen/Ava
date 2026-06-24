@@ -9,7 +9,6 @@ private:
     /* data */
     std::vector<double> InputLayer;
     std::vector<std::vector<Perceptron>> HiddenLayers;
-    std::vector<Perceptron> OutputLayer;
 
     ActivationFunction *act;
 
@@ -19,21 +18,13 @@ public:
     ~NeuralNetwork();
 
     void setInputsLayer(const std::vector<double> &Inp);
-    void createHiddenLayers(int amount);
-
-    void PopulateHiddenLayer(int index, int amount);
-    void PopulateOutputLayer(int amount);
-
-    void setActivation();
-    void setOutAct();
-
+    void addLayer(int amount , ActivationFunction * act) ; 
     void setPercInputs(int index, std::vector<double> inp);
-    void setOutputInps();
 
     std::vector<double> CalcLayerOutputs(int index);
     void PassThrough();
 
-    std::vector<double> returnOutput();
+    std::vector<double> getOutputs() ; 
 
     void CheckHiddenLayerOutputs()
     {
@@ -41,26 +32,12 @@ public:
         {
             for (int j = 0; j < this->HiddenLayers[i].size(); j++)
             {
-                std::cout << "OUTPUT OF HIDDEN LAYER \n";
+                std::cout << "OUTPUT OF "<< i << " HIDDEN LAYER AND PERCEPTRON " << j << std::endl ;
                 HiddenLayers[i][j].printInp(); 
-                HiddenLayers[i][j].printOut();
                 HiddenLayers[i][j].printY();
                 std::cout << "END OF THIS PERCEPTON\n";
             }
         }
-    }
-
-    void checkOutputLayer()
-    {
-        std::cout << "CHECKING OUTPUT LAYER\n" ; 
-        for ( int i = 0 ; i < OutputLayer.size() ; i++)
-        {
-            OutputLayer[i].printOut() ; 
-            OutputLayer[i].printY() ;
-
-            OutputLayer[i].printInp() ; 
-        }
-        std::cout << "CONCLUDS OUTPUT INFO\n" ; 
     }
 
     void KnownXORAnswer()
@@ -70,11 +47,13 @@ public:
 
         HiddenLayers[0][0].setWeights(w1);
         HiddenLayers[0][1].setWeights(w1);
-        OutputLayer[0].setWeights(v1);
+
+        HiddenLayers[1][0].setWeights(v1);
 
         HiddenLayers[0][0].setBias(-0.5);
         HiddenLayers[0][1].setBias(-1.5);
-        OutputLayer[0].setBias(-0.5);
+
+        HiddenLayers[1][0].setBias(-0.5);
     }
 };
 

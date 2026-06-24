@@ -25,76 +25,23 @@ void NeuralNetwork::setInputsLayer(const std::vector<double> &Inp)
     }
 }
 
-void NeuralNetwork::createHiddenLayers(int amount)
+void NeuralNetwork::addLayer(int amount , ActivationFunction * act )
 {
-    for (int i = 0; i < amount; i++)
-    {
-        this->HiddenLayers.push_back(std::vector<Perceptron>());
-    }
-}
+    this->HiddenLayers.push_back ( std::vector<Perceptron>() ) ; 
 
-void NeuralNetwork::PopulateHiddenLayer(int index, int amount)
-{
-    if (index >= this->HiddenLayers.size())
-    {
-        std::cout << "Index is larger as Hidden layer\n";
-        return;
-    }
+    int last = HiddenLayers.size() - 1 ;
 
-    for (int i = 0; i < amount; i++)
+    for ( int i = 0 ; i < amount ; i++)
     {
-        this->HiddenLayers[index].push_back(Perceptron(this->act));
-    }
-}
-
-void NeuralNetwork::PopulateOutputLayer(int amount)
-{
-    for (int i = 0; i < amount; i++)
-    {
-        this->OutputLayer.push_back(Perceptron(this->act));
-    }
-}
-
-void NeuralNetwork::setActivation()
-{
-    for (int i = 0; i < this->HiddenLayers.size(); i++)
-    {
-        for (int j = 0; j < this->HiddenLayers[j].size(); j++)
-        {
-            this->HiddenLayers[i][j].setActFunc(act);
-        }
-    }
-}
-
-void NeuralNetwork::setOutAct()
-{
-    for (int i = 0; i < this->OutputLayer.size(); i++)
-    {
-        this->OutputLayer[i].setActFunc(act);
+        HiddenLayers[last].push_back( Perceptron(act) ) ; 
     }
 }
 
 void NeuralNetwork::setPercInputs(int index, std::vector<double> inp)
 {
-    if (index >= this->HiddenLayers.size())
-    {
-        std::cout << "Index is larger as Hidden layer\n";
-        return;
-    }
-
     for (int i = 0; i < this->HiddenLayers[index].size(); i++)
     {
         this->HiddenLayers[index][i].setInp(inp);
-    }
-}
-
-void NeuralNetwork::setOutputInps()
-{
-    int last = HiddenLayers.size() - 1;
-
-    for (int i = 0; i < this->OutputLayer.size(); i++)
-    {
-        this->OutputLayer[i].setInp(CalcLayerOutputs(last));
     }
 }
 
@@ -129,17 +76,16 @@ void NeuralNetwork::PassThrough()
     {
         setPercInputs(i, CalcLayerOutputs(i - 1));
     }
-    setOutputInps();
 }
 
-std::vector<double> NeuralNetwork::returnOutput()
+std::vector<double> NeuralNetwork::getOutputs()
 {
-    std::vector<double> out;
-    for (int i = 0; i < this->OutputLayer.size(); i++)
+    std::vector<double> out ; 
+    int last = this->HiddenLayers.size() - 1 ; 
+    for ( int i = 0 ; i < this->HiddenLayers[last].size() ; i++  )
     {
-        out.push_back(OutputLayer[i].CalcY());
+        out.push_back(this->HiddenLayers[last][i].CalcY() )  ; 
     }
-
     return out;
 }
 

@@ -24,12 +24,12 @@ void runEpoch(std::vector<std::vector<double>> inp, std::vector<double> out, int
 
 void XORSolved()
 {
-    NeuralNetwork N(new StepFunc());
+    NeuralNetwork N;
     std::vector<std::vector<double>> inp = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
 
-    N.createHiddenLayers(1);
-    N.PopulateHiddenLayer(0, 2);
-    N.PopulateOutputLayer(1);
+    N.addLayer(2, new StepFunc());
+    N.addLayer(1, new StepFunc());
+
     N.KnownXORAnswer();
 
     for (int i = 0; i < 4; i++)
@@ -37,17 +37,18 @@ void XORSolved()
         N.setInputsLayer(inp[i]);
         N.PassThrough();
 
-        std::cout << "OUTPUT\n" ; 
-        for (double x : N.returnOutput())
+        std::cout << "OUTPUT\n";
+        for (double d : N.getOutputs())
         {
-            std::cout << x << "\n";
+            std::cout << d << " ";
         }
+        std::cout << std::endl;
     }
 }
 
 int main()
 {
-    XORSolved() ; 
+    XORSolved();
 
     std::cout << "Program Ran to Completion\n";
     system("pause");
