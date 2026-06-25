@@ -11,7 +11,7 @@ private:
     ActivationFunction *act;
 
     int numInputs = 0;
-    double bias = 1;
+    double bias = 0;
 
     std::vector<double> Inputs;
     std::vector<double> Weights;
@@ -51,6 +51,8 @@ public:
 
     void TrainPerceptron(std::vector<double> inp, double out) ; 
     std::vector<double> returnWeights() ; 
+    std::vector<double> returnInputs() ; 
+    double returnBias() ; 
 
 
 };

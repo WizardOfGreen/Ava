@@ -17,15 +17,17 @@ public:
     ~NeuralNetwork();
 
     void setInputsLayer(const std::vector<double> &Inp);
-    void addLayer(int amount , ActivationFunction * act) ; 
+    void addLayer(int amount, ActivationFunction *act);
     void setPercInputs(int index, std::vector<double> inp);
+
+    void setLayerWeights(int indexOfLayer, int indexOfPerceptron, std::vector<double> newWeights);
 
     std::vector<double> CalcLayerOutputs(int index);
     void PassThrough();
 
-    void TrainNN(std::vector<std::vector<double>> inp , std::vector<std::vector<double>> out , int epoch ) ; 
+    void TrainNN(std::vector<std::vector<double>> inp, std::vector<std::vector<double>> out, int epoch);
 
-    std::vector<double> getOutputs() ; 
+    std::vector<double> getOutputs();
 
     void CheckHiddenLayerOutputs()
     {
@@ -33,10 +35,27 @@ public:
         {
             for (int j = 0; j < this->HiddenLayers[i].size(); j++)
             {
-                std::cout << "OUTPUT OF "<< i << " HIDDEN LAYER AND PERCEPTRON " << j << std::endl ;
-                HiddenLayers[i][j].printInp(); 
-                HiddenLayers[i][j].printY();
+                std::cout << "OUTPUT OF " << i << " HIDDEN LAYER AND PERCEPTRON " << j << std::endl;
+                HiddenLayers[i][j].printInp();
+                std::cout << HiddenLayers[i][j].CalcY() << std::endl;
                 std::cout << "END OF THIS PERCEPTON\n";
+            }
+        }
+    }
+
+    void checkWeights()
+    {
+        int lastLayerIndex = HiddenLayers.size() - 1;
+        for (int indexLayer = 0; indexLayer < lastLayerIndex + 1; indexLayer++)
+        {
+            for (int percIdx = 0; percIdx < HiddenLayers[indexLayer].size(); percIdx++) // For now , just one
+            {
+                for (int weightIdx = 0; weightIdx < HiddenLayers[indexLayer][percIdx].returnWeights().size(); weightIdx++)
+                {
+                    std::cout << indexLayer << " " << percIdx << " " << weightIdx << " ";
+                    std::cout << "W:" << HiddenLayers[indexLayer][percIdx].returnWeights()[weightIdx];
+                    std::cout << std::endl;
+                }
             }
         }
     }
@@ -44,7 +63,7 @@ public:
     void KnownXORAnswer()
     {
         std::vector<double> w1 = {1, 1};
-        std::vector<double> v1 = {1 , -2};
+        std::vector<double> v1 = {1, -2};
 
         HiddenLayers[0][0].setWeights(w1);
         HiddenLayers[0][1].setWeights(w1);

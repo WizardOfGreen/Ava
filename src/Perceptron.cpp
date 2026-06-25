@@ -59,6 +59,7 @@ void Perceptron::setWeights()
 
 void Perceptron::setWeights(std::vector<double> w)
 {
+    this->Weights.clear() ; 
     for ( double x: w)
     {
         this->Weights.push_back(x) ; 
@@ -109,6 +110,16 @@ void Perceptron::TrainPerceptron(std::vector<double> inp, double out)
 std::vector<double> Perceptron::returnWeights()
 {
     return this->Weights ;
+}
+
+std::vector<double> Perceptron::returnInputs()
+{
+    return this->Inputs ; 
+}
+
+double Perceptron::returnBias()
+{
+    return this->bias ; 
 }
 
 #endif

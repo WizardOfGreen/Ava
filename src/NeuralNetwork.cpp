@@ -40,6 +40,11 @@ void NeuralNetwork::setPercInputs(int index, std::vector<double> inp)
     }
 }
 
+void NeuralNetwork::setLayerWeights(int indexOfLayer, int indexOfPerceptron, std::vector<double> newWeights)
+{
+    HiddenLayers[indexOfLayer][indexOfPerceptron].setWeights(newWeights);
+}
+
 std::vector<double> NeuralNetwork::CalcLayerOutputs(int index)
 {
     std::vector<double> ret;
@@ -75,42 +80,65 @@ void NeuralNetwork::PassThrough()
 
 void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<std::vector<double>> out, int epoch)
 {
-    double error;
-    int last ; 
-    double learningRate = 0.05 ;  
-    std::vector<double> outp ; 
+    int lastLayerIndex = this->HiddenLayers.size() - 1;
+    std::vector<double> errOfOutpLayer;
+    std::vector<std::vector<std::vector<double>>> errOfHiddenLayers; // ErrOfHidden Layer for Layer -> Perceptron -> Weight
+    std::vector<double> newWeights;
+    std::vector<std::vector<double>> prevErr;
 
-    int VAL = 0 ; // CHANGE THIS LATER
-    double TEST ; 
-    double percOut ; 
     for (int i = 0; i < epoch; i++)
     {
-        for (int j = 0; j < out.size(); j++)
+        prevErr.clear() ;
+        newWeights.clear() ;
+        errOfHiddenLayers.clear() ;
+        errOfOutpLayer.clear() ; 
+
+        PassThrough() ; 
+
+        int index = 0;
+        for (double d : getOutputs())
         {
-            setInputsLayer(inp[j]) ; 
-            PassThrough();
-            outp = getOutputs() ; 
-            error = out[j][VAL] - outp[VAL]  ;
+            d = d * (1 - d) * (out[0][index] - d);
+            index++;
+            errOfOutpLayer.push_back(d);
+        }
 
-            last = HiddenLayers.size() - 1 ;
-            TEST = outp[VAL] * ( 1 - outp[VAL]) * (error ) ;
-            
+        double Err = errOfOutpLayer[0];
+        double currErr;
 
-            for ( int i = HiddenLayers.size() - 2 ; i >= 0 ; i-- )
+        for (int i = 0; i < HiddenLayers.size(); i++)
+        {
+            prevErr.push_back(std::vector<double>());
+        }
+
+        // Index of the Layers
+        for (int indexLayer = lastLayerIndex; indexLayer >= 0; indexLayer--)
+        {
+            for (int percIdx = 0; percIdx < HiddenLayers[indexLayer].size(); percIdx++) // For now , just one
             {
-                for ( int j = 0 ; j < HiddenLayers[i].size() ; j++)
-                {
-                    for ( int k = 0 ; k < HiddenLayers[i][j].returnWeights().size() ; k++ )
-                    {
+                newWeights.clear();
+                newWeights = HiddenLayers[indexLayer][percIdx].returnWeights(); // new Weights Storage
 
+                for (int weightIdx = 0; weightIdx < HiddenLayers[indexLayer][percIdx].returnWeights().size(); weightIdx++)
+                {
+                    if (indexLayer == lastLayerIndex) // Only Triggers Once
+                    {
+                        currErr = Err;
+                        double perRes = HiddenLayers[indexLayer - 1][weightIdx].CalcY();
+                        newWeights[weightIdx] = currErr * perRes + newWeights[weightIdx];
+                        prevErr[indexLayer].push_back(perRes * (1 - perRes) * (newWeights[weightIdx] * currErr));
+                    }
+                    else if (indexLayer == 0) // Only Triggers Once
+                    {
+                        currErr = prevErr[indexLayer + 1][percIdx];
+                        newWeights[weightIdx] = 1 * currErr * HiddenLayers[indexLayer][percIdx].returnInputs()[weightIdx] + newWeights[weightIdx];
                     }
                 }
+                HiddenLayers[indexLayer][percIdx].setWeights(newWeights);
             }
-
         }
     }
 }
-
 std::vector<double> NeuralNetwork::getOutputs()
 {
     std::vector<double> out;
