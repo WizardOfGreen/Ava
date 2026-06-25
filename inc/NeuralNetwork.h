@@ -35,7 +35,7 @@ public:
         {
             for (int j = 0; j < this->HiddenLayers[i].size(); j++)
             {
-                std::cout << "OUTPUT OF " << i << " HIDDEN LAYER AND PERCEPTRON " << j << std::endl;
+                std::cout << "OUTPUT OF HIDDEN LAYER " << i << " AND PERCEPTRON " << j << std::endl;
                 HiddenLayers[i][j].printInp();
                 std::cout << HiddenLayers[i][j].CalcY() << std::endl;
                 std::cout << "END OF THIS PERCEPTON\n";
@@ -45,6 +45,7 @@ public:
 
     void checkWeights()
     {
+        std::cout << std::endl ; 
         int lastLayerIndex = HiddenLayers.size() - 1;
         for (int indexLayer = 0; indexLayer < lastLayerIndex + 1; indexLayer++)
         {
@@ -53,7 +54,7 @@ public:
                 for (int weightIdx = 0; weightIdx < HiddenLayers[indexLayer][percIdx].returnWeights().size(); weightIdx++)
                 {
                     std::cout << indexLayer << " " << percIdx << " " << weightIdx << " ";
-                    std::cout << "W:" << HiddenLayers[indexLayer][percIdx].returnWeights()[weightIdx];
+                    std::cout << "W: " << HiddenLayers[indexLayer][percIdx].returnWeights()[weightIdx];
                     std::cout << std::endl;
                 }
             }

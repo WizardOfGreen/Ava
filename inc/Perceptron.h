@@ -41,7 +41,6 @@ public:
             std::cout << d << " " ; 
         }
         std::cout << std::endl ; 
-
     }
 
     void setInp(const std::vector<double> &inp);

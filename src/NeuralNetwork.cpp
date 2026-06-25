@@ -86,23 +86,29 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
     std::vector<double> newWeights;
     std::vector<std::vector<double>> prevErr;
 
+    int mod = 0;
+
     for (int i = 0; i < epoch; i++)
     {
-        prevErr.clear() ;
-        newWeights.clear() ;
-        errOfHiddenLayers.clear() ;
-        errOfOutpLayer.clear() ; 
+        if (mod == 4)
+            mod = 0;
 
-        PassThrough() ; 
+        this->setInputsLayer(inp[mod]);
+        prevErr.clear();
+        newWeights.clear();
+        errOfHiddenLayers.clear();
+        errOfOutpLayer.clear();
+
+        PassThrough();
 
         int index = 0;
         for (double d : getOutputs())
         {
-            d = d * (1 - d) * (out[0][index] - d);
+            d = 0.5 * pow((out[mod][0] - d), 2); // Different LOSS Function
+            // d = d * (1 - d) * (out[mod][index] - d);
             index++;
             errOfOutpLayer.push_back(d);
         }
-
         double Err = errOfOutpLayer[0];
         double currErr;
 
@@ -111,7 +117,6 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
             prevErr.push_back(std::vector<double>());
         }
 
-        // Index of the Layers
         for (int indexLayer = lastLayerIndex; indexLayer >= 0; indexLayer--)
         {
             for (int percIdx = 0; percIdx < HiddenLayers[indexLayer].size(); percIdx++) // For now , just one
@@ -125,18 +130,29 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                     {
                         currErr = Err;
                         double perRes = HiddenLayers[indexLayer - 1][weightIdx].CalcY();
-                        newWeights[weightIdx] = currErr * perRes + newWeights[weightIdx];
-                        prevErr[indexLayer].push_back(perRes * (1 - perRes) * (newWeights[weightIdx] * currErr));
+                        double newBias = HiddenLayers[indexLayer][percIdx].returnBias() - 1 * currErr;
+                        newWeights[weightIdx] = 1 * currErr * perRes + newWeights[weightIdx];
+                        HiddenLayers[indexLayer][percIdx].setBias(newBias);
+
+                        double storeVal = perRes * (1 - perRes) * (newWeights[weightIdx] * currErr);
+                        prevErr[indexLayer].push_back(storeVal);
                     }
-                    else if (indexLayer == 0) // Only Triggers Once
+                    else // Only Triggers Once
                     {
                         currErr = prevErr[indexLayer + 1][percIdx];
-                        newWeights[weightIdx] = 1 * currErr * HiddenLayers[indexLayer][percIdx].returnInputs()[weightIdx] + newWeights[weightIdx];
+                        double perRes = HiddenLayers[indexLayer][weightIdx].CalcY();
+                        newWeights[weightIdx] = 1 * currErr * HiddenLayers[indexLayer][percIdx].returnInputs()[weightIdx] + (newWeights[weightIdx]);
+
+                        double storeVal = perRes * (1 - perRes) * (newWeights[weightIdx] * currErr);
+                        prevErr[indexLayer].push_back(storeVal);
+                        double newBias = HiddenLayers[indexLayer][percIdx].returnBias() - 1 * currErr;
+                        HiddenLayers[indexLayer][percIdx].setBias(newBias);
                     }
                 }
                 HiddenLayers[indexLayer][percIdx].setWeights(newWeights);
             }
         }
+        mod++;
     }
 }
 std::vector<double> NeuralNetwork::getOutputs()

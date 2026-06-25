@@ -46,7 +46,7 @@ void XORSolved()
     }
 }
 
-void XORTraining()
+void SimpleBackPropogation()
 {
     NeuralNetwork N;
     std::vector<std::vector<double>> inp = {{0.35, 0.7}};
@@ -75,7 +75,7 @@ void XORTraining()
     std::cout << std::endl;
     std::cout << std::endl;
 
-    N.TrainNN(inp, out, 1000);
+    N.TrainNN(inp, out, 1);
     N.PassThrough();
 
     std::cout << "OUTPUT\n";
@@ -87,10 +87,36 @@ void XORTraining()
     std::cout << std::endl;
 }
 
+void XORTraining()
+{
+    NeuralNetwork N;
+    std::vector<std::vector<double>> inp = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
+    std::vector<std::vector<double>> out = {{0}, {1}, {1}, {0}};
+
+    N.addLayer(2, new Sigmoid());
+    N.addLayer(1, new Sigmoid());
+
+    N.setLayerWeights(0, 0, {5.0, 5.0});
+    N.setLayerWeights(0, 1, {-5.0, -5.0});
+    N.setLayerWeights(1, 0, {7.5, 7.5});
+
+    N.TrainNN(inp , out , 16) ; 
+    for ( int i = 0 ; i < 4 ; i++)
+    {
+        N.setInputsLayer(inp[i]) ;
+        N.PassThrough() ; 
+
+        std::cout << "Inputs :" << inp[i][0] << " " << inp[i][1] << std::endl ;
+        std::cout << "Outputs:" << N.getOutputs()[0] << std::endl ; 
+    }
+
+}
+
 int main()
 {
-    XORTraining();
+    // SimpleBackPropogation();
     // XORSolved() ;
+    XORTraining();
 
     std::cout << "Program Ran to Completion\n";
     system("pause");
