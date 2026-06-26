@@ -3,6 +3,7 @@
 
 #include "Matrix.h"
 #include "ActFunctions.h"
+#include "LossFunctions.h"
 #include "Perceptron.h"
 
 #include "NeuralNetwork.h"
@@ -100,23 +101,60 @@ void XORTraining()
     N.setLayerWeights(0, 1, {-5.0, -5.0});
     N.setLayerWeights(1, 0, {7.5, 7.5});
 
-    N.TrainNN(inp , out , 16) ; 
-    for ( int i = 0 ; i < 4 ; i++)
+    N.TrainNN(inp, out, 16);
+    for (int i = 0; i < 4; i++)
     {
-        N.setInputsLayer(inp[i]) ;
-        N.PassThrough() ; 
+        N.setInputsLayer(inp[i]);
+        N.PassThrough();
 
-        std::cout << "Inputs :" << inp[i][0] << " " << inp[i][1] << std::endl ;
-        std::cout << "Outputs:" << N.getOutputs()[0] << std::endl ; 
+        std::cout << "Inputs :" << inp[i][0] << " " << inp[i][1] << std::endl;
+        std::cout << "Outputs:" << N.getOutputs()[0] << std::endl;
+    }
+}
+
+void MSETest()
+{
+    std::cout << " --- MEAN SQUARED --- \n";
+    LossFunction *mse = new MSE();
+    std::vector<double> trueValues = {10, 20, 30, 40, 50};
+    std::vector<double> predValues = {12, 18, 32, 38, 48};
+    std::cout << "True Values : ";
+    for (double d : trueValues)
+    {
+        std::cout << d << " ";
+    }
+    std::cout << std::endl;
+    std::cout << "Predicted Values : ";
+    for (double d : predValues)
+    {
+        std::cout << d << " ";
     }
 
+    std::cout << "\n-------------------\n";
+    std::cout << "Mean Squared Error : ";
+    std::cout << mse->calculateLoss(predValues, trueValues);
+    std::cout << "\n-------------------\n";
+
+    std::cout << "Root Mean Squared Error : ";
+    std::cout << (new RootMSE())->calculateLoss(predValues, trueValues);
+    std::cout << "\n-------------------\n";
+
+    std::cout << "Root Mean Squared Error : ";
+    std::cout << (new AbsMSE())->calculateLoss(predValues, trueValues);
+    std::cout << "\n-------------------\n";
+}
+
+void LossFunctionTests()
+{
+    MSETest();
 }
 
 int main()
 {
     // SimpleBackPropogation();
     // XORSolved() ;
-    XORTraining();
+    // XORTraining();
+    LossFunctionTests();
 
     std::cout << "Program Ran to Completion\n";
     system("pause");
