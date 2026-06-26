@@ -99,7 +99,7 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
             {
                 setInputsLayer(inp[j]);
                 PassThrough();
-                double outp = getOutputs()[0]; // Change later , should be size of Output Neurons
+                double outp = getOutputs()[j]; // Change later , should be size of Output Neurons
                 Ouputs[outInx].push_back(outp);
             }
 
@@ -155,9 +155,6 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                     }
                 }
             }
-
-            // After this point , All Errors have been Calculated
-            // Proceeding with Weigth Updates
 
             for (int Layeridx = indexOfLastLayer; Layeridx >= 0; Layeridx--)
             {
