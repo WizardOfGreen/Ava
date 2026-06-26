@@ -50,7 +50,7 @@ void XORSolved()
 void SimpleBackPropogation()
 {
     NeuralNetwork N;
-    N.AssignLossFunction(new RootMSE() ) ; 
+    N.AssignLossFunction(new RootMSE());
     std::vector<std::vector<double>> inp = {{0.35, 0.7}};
     std::vector<std::vector<double>> out = {{0.5}};
 
@@ -77,13 +77,24 @@ void SimpleBackPropogation()
     std::cout << std::endl;
     std::cout << std::endl;
 
-    N.TrainNN(inp, out, 1);
+    N.TrainNN(inp, out, 1000 );
+
+    N.setInputsLayer(inp[0]);
+    N.PassThrough();
+
+    std::cout << "OUTPUT\n";
+    for (double d : N.getOutputs())
+    {
+        std::cout << d << " ";
+    }
+    std::cout << std::endl;
+    std::cout << std::endl;
 }
 
 void XORTraining()
 {
     NeuralNetwork N;
-    N.AssignLossFunction(new MSE() ) ; 
+    N.AssignLossFunction(new MSE());
     std::vector<std::vector<double>> inp = {{0, 0}, {0, 1}, {1, 0}, {1, 1}};
     std::vector<std::vector<double>> out = {{0}, {1}, {1}, {0}};
 

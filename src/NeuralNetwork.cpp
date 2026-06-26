@@ -104,7 +104,6 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
             }
 
             Errors[outInx].push_back(lossFunc->calculateLoss(Ouputs[outInx], out[outInx]));
-            std::cout << "Error : " << Errors[outInx][0] << std::endl; // Needs to be size of Output Neurons
 
             std::vector<double> outpNeuronsError; // Errors of all the Output Neurons
             for (int outNeurErr = 0; outNeurErr < out.size(); outNeurErr++)
@@ -182,14 +181,11 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                         {
                             double Err = -1 * outpNeuronsError[PercIdx];
                             newWeights[WeightIdx] = 1 * Err * Inputs[WeightIdx] + newWeights[WeightIdx];
-                            std::cout << "OutpLayer : " << newWeights[WeightIdx] << std::endl;
                         }
                         else
                         {
                             double Err = hiddenLayerErrors[Layeridx][ PercIdx] ; 
                             newWeights[WeightIdx] = 1 * Err * Inputs[WeightIdx] + newWeights[WeightIdx];
-                            std::cout << "Error : " << Err << std::endl;
-                            std::cout << "HiddeLayer : " << newWeights[WeightIdx] << std::endl;
                         }
                     }
                     HiddenLayers[Layeridx][PercIdx].setWeights(newWeights);
