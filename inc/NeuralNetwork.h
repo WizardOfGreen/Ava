@@ -2,6 +2,7 @@
 #define NEURALNETWORK_H
 
 #include "Perceptron.h"
+#include "LossFunctions.h"
 
 class NeuralNetwork
 {
@@ -11,10 +12,13 @@ private:
     std::vector<std::vector<Perceptron>> HiddenLayers;
 
     ActivationFunction *act;
+    LossFunction * lossFunc ;
 
 public:
     NeuralNetwork();
     ~NeuralNetwork();
+
+    void AssignLossFunction(LossFunction * lossFunc); 
 
     void setInputsLayer(const std::vector<double> &Inp);
     void addLayer(int amount, ActivationFunction *act);
@@ -27,7 +31,7 @@ public:
 
     void TrainNN(std::vector<std::vector<double>> inp, std::vector<std::vector<double>> out, int epoch);
 
-    std::vector<double> getOutputs();
+    std::vector<double> getOutputs() ;
 
     void CheckHiddenLayerOutputs()
     {
