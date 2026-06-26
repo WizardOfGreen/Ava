@@ -20,12 +20,37 @@ public:
     }
 };
 
+class MSE2 : public LossFunction
+{
+public:
+    double calculateLoss(std::vector<double> predicted, std::vector<double> trueval)
+    {
+        int size = predicted.size();
+        double res = 0;
+        res = (predicted[0] - trueval[0]) * (predicted[0]) * (1 - predicted[0]);
+        return res;
+    }
+
+    double calculateLoss2(double predicted, double trueval)
+    {
+        double res = 0;
+        res = (predicted - trueval) * (predicted) * (1 - predicted);
+        return res;
+    }
+};
+
 class RootMSE : public LossFunction
 {
 public:
     double calculateLoss(std::vector<double> predicted, std::vector<double> trueval)
     {
         return sqrt((new MSE())->calculateLoss(predicted, trueval));
+    }
+    double calculateLoss2(double predicted, double trueval)
+    {
+        double res = 0;
+        res = (predicted - trueval) * (predicted) * (1 - predicted);
+        return res;
     }
 };
 

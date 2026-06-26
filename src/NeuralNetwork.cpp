@@ -104,17 +104,20 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                 Ouputs[outInx] = (outps);
             }
 
-            for (int j = 0; j < out[outInx].size(); j++)
+            for (int idx = 0; idx < out[outInx].size(); idx++)
             {
-                Errors[outInx].push_back(double());
-                Errors[outInx][j] = (lossFunc->calculateLoss(Ouputs[outInx], out[outInx]));
+                Errors[outInx].push_back(lossFunc->calculateLoss2(Ouputs[outInx][idx], out[outInx][idx]));
             }
 
             std::vector<double> outpNeuronsError; // Errors of all the Output Neurons
             for (int outNeurErr = 0; outNeurErr < out[outInx].size(); outNeurErr++)
             {
-                double err = Ouputs[outInx][outNeurErr] * (1 - Ouputs[outInx][outNeurErr]) * Errors[outInx][outNeurErr];
+                double output = Ouputs[outInx][outNeurErr];
+                double error = Errors[outInx][outNeurErr];
+
+                double err = error; // Changed this formula , moved to Calclulate Loss 2
                 outpNeuronsError.push_back(err);
+                std::cout << "Err : " << error << std::endl;
             }
 
             std::vector<std::vector<double>> hiddenLayerErrors;
@@ -127,25 +130,29 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                 }
             }
 
-            for (int Layeridx = indexOfLastLayer - 1; Layeridx >= 0; Layeridx--)
+            for (int Layeridx = indexOfLastLayer  ; Layeridx >= 0; Layeridx--)
             {
+                std::cout << "This is Hidden Layer : " << Layeridx + 1 << std::endl;
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
                 {
+                    std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
+
                     for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
                     {
-                        std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
-                        if (Layeridx == indexOfLastLayer - 1)
+
+                        if (Layeridx == (indexOfLastLayer ))
                         {
-                            double PerRes = HiddenLayers[Layeridx][PercIdx].CalcY();
+                            double PerRes = HiddenLayers[Layeridx - 1][WeightIdx].CalcY();
                             double weightVal = newWeights[WeightIdx];
 
+                            double Error = outpNeuronsError[WeightIdx] ; 
+                            std::cout << "Errors : " << Error << std::endl ;
+                            std::cout << "Weights : " << weightVal << std::endl ;  
+
                             // Cycles through all the Output Neurons
-                            for (int outpNeurErr = 0; outpNeurErr < outpNeuronsError.size(); outpNeurErr++)
-                            {
-                                double Err = PerRes * (1 - PerRes) * (weightVal * outpNeuronsError[outpNeurErr]);
-                                hiddenLayerErrors[Layeridx][PercIdx] = Err;
-                                newWeights[WeightIdx] = 1 * Err * weightVal;
-                            }
+                            double Err = PerRes * (1 - PerRes) * (weightVal * outpNeuronsError[PercIdx]);
+                            hiddenLayerErrors[Layeridx][PercIdx] = Err;
+
                         }
                         else // This should be tested later
                         {
@@ -162,6 +169,7 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
             }
             // Until here , Multiple Neuron Outputs Work
 
+            // Here Weights is being updated
             for (int Layeridx = indexOfLastLayer; Layeridx >= 0; Layeridx--)
             {
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
@@ -182,8 +190,14 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
 
                         if (Layeridx == indexOfLastLayer)
                         {
-                            double Err = -1 * outpNeuronsError[PercIdx]; // Error Here Size of OutputNeronErrors is only one
+                            std::cout << "Weight : " << newWeights[WeightIdx] << std::endl;
+
+                            double Err = outpNeuronsError[PercIdx]; // Error Here Size of OutputNeronErrors is only one
                             newWeights[WeightIdx] = 1 * Err * Inputs[WeightIdx] + newWeights[WeightIdx];
+                            std::cout << "Fetched Error : " << outpNeuronsError[PercIdx] << std::endl;
+                            std::cout << "Calculated Error : " << Err << std::endl;
+                            std::cout << "New Weight : " << newWeights[WeightIdx] << std::endl
+                                      << std::endl;
                         }
                         else
                         {
