@@ -117,7 +117,6 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
 
                 double err = error; // Changed this formula , moved to Calclulate Loss 2
                 outpNeuronsError.push_back(err);
-                std::cout << "Err : " << error << std::endl;
             }
 
             std::vector<std::vector<double>> hiddenLayerErrors;
@@ -132,7 +131,7 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
 
             for (int Layeridx = indexOfLastLayer  ; Layeridx >= 0; Layeridx--)
             {
-                std::cout << "This is Hidden Layer : " << Layeridx + 1 << std::endl;
+                std::cout << "This is Hidden Layer : " << Layeridx << std::endl;
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
                 {
                     std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
@@ -140,7 +139,7 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                     for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
                     {
 
-                        if (Layeridx == (indexOfLastLayer ))
+                        if (Layeridx == indexOfLastLayer)
                         {
                             double PerRes = HiddenLayers[Layeridx - 1][WeightIdx].CalcY();
                             double weightVal = newWeights[WeightIdx];
@@ -148,7 +147,7 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                             double Error = outpNeuronsError[WeightIdx] ; 
                             std::cout << "Errors : " << Error << std::endl ;
                             std::cout << "Weights : " << weightVal << std::endl ;  
-
+                            std::cout << "Perc Results : " << PerRes << std::endl ; 
                             // Cycles through all the Output Neurons
                             double Err = PerRes * (1 - PerRes) * (weightVal * outpNeuronsError[PercIdx]);
                             hiddenLayerErrors[Layeridx][PercIdx] = Err;
