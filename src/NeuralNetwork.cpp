@@ -90,6 +90,7 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
     {
         std::vector<std::vector<double>> Errors;
         std::vector<std::vector<double>> Ouputs;
+        std::vector<double> outps;
         for (int outInx = 0; outInx < out.size(); outInx++)
         {
             Errors.push_back(std::vector<double>());
@@ -99,16 +100,20 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
             {
                 setInputsLayer(inp[j]);
                 PassThrough();
-                double outp = getOutputs()[j]; // Change later , should be size of Output Neurons
-                Ouputs[outInx].push_back(outp);
+                outps = getOutputs();
+                Ouputs[outInx] = (outps);
             }
 
-            Errors[outInx].push_back(lossFunc->calculateLoss(Ouputs[outInx], out[outInx]));
+            for (int j = 0; j < out[outInx].size(); j++)
+            {
+                Errors[outInx].push_back(double());
+                Errors[outInx][j] = (lossFunc->calculateLoss(Ouputs[outInx], out[outInx]));
+            }
 
             std::vector<double> outpNeuronsError; // Errors of all the Output Neurons
-            for (int outNeurErr = 0; outNeurErr < out.size(); outNeurErr++)
+            for (int outNeurErr = 0; outNeurErr < out[outInx].size(); outNeurErr++)
             {
-                double err = Ouputs[outInx][outNeurErr] * (1 - Ouputs[outInx][outNeurErr]) * Errors[outInx][outInx];
+                double err = Ouputs[outInx][outNeurErr] * (1 - Ouputs[outInx][outNeurErr]) * Errors[outInx][outNeurErr];
                 outpNeuronsError.push_back(err);
             }
 
@@ -155,6 +160,7 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                     }
                 }
             }
+            // Until here , Multiple Neuron Outputs Work
 
             for (int Layeridx = indexOfLastLayer; Layeridx >= 0; Layeridx--)
             {
@@ -176,13 +182,13 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
 
                         if (Layeridx == indexOfLastLayer)
                         {
-                            double Err = -1 * outpNeuronsError[PercIdx];
+                            double Err = -1 * outpNeuronsError[PercIdx]; // Error Here Size of OutputNeronErrors is only one
                             newWeights[WeightIdx] = 1 * Err * Inputs[WeightIdx] + newWeights[WeightIdx];
                         }
                         else
                         {
-                            double Err = hiddenLayerErrors[Layeridx][ PercIdx] ; 
-                            newWeights[WeightIdx] = 1 * Err * Inputs[WeightIdx] + newWeights[WeightIdx];
+                            double Err = hiddenLayerErrors[Layeridx][PercIdx];                           // no Errors Here
+                            newWeights[WeightIdx] = 1 * Err * Inputs[WeightIdx] + newWeights[WeightIdx]; // No Errors Here
                         }
                     }
                     HiddenLayers[Layeridx][PercIdx].setWeights(newWeights);

@@ -97,17 +97,18 @@ void MultipleHiddenLayers()
     NeuralNetwork N;
     N.AssignLossFunction(new RootMSE());
     std::vector<std::vector<double>> inp = {{0.35, 0.7}};
-    std::vector<std::vector<double>> out = {{0.5}};
+    std::vector<std::vector<double>> out = {{0.5 , 0.7}};
 
     N.addLayer(2, new Sigmoid());
     N.addLayer(2, new Sigmoid());
-    N.addLayer(1, new Sigmoid());
+    N.addLayer(2, new Sigmoid());
 
     std::vector<double> firstWeights = {0.2, 0.2};
     std::vector<double> secondWeights = {0.3, 0.3};
     std::vector<double> thirdWeight = {0.3, 0.9};
     std::vector<double> fourthWeight = {0.2 , 0.1} ; 
-    std::vector<double> fifthWeight = {0.7 , 0.55} ; 
+    std::vector<double> fifthWeight = {0.7 , 0.55} ;
+    std::vector<double> sixthWeight = {0.6 , 0.35} ;  
 
     N.setInputsLayer(inp[0]);
 
@@ -116,9 +117,9 @@ void MultipleHiddenLayers()
     N.setLayerWeights(1, 0, thirdWeight);
     N.setLayerWeights(1 ,1 , fourthWeight) ;  
     N.setLayerWeights(2 ,0 , fifthWeight) ;  
+    N.setLayerWeights(2,1,sixthWeight) ; 
 
     N.PassThrough();
-    N.checkWeights() ; 
 
     std::cout << "OUTPUT\n";
     for (double d : N.getOutputs())
@@ -129,7 +130,6 @@ void MultipleHiddenLayers()
     std::cout << std::endl;
 
     N.TrainNN(inp, out, 1000 );
-    N.checkWeights() ; 
 
     N.setInputsLayer(inp[0]);
     N.PassThrough();
