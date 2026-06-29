@@ -10,6 +10,11 @@ public:
     {
         return 1 / (1 + pow(e, (x * -1)));
     }
+    double derivative(double a)
+    {
+        double res = a * (1 - a);
+        return res;
+    }
 };
 
 class ReLU : public ActivationFunction

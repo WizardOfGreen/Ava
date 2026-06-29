@@ -10,15 +10,16 @@ private:
     /* data */
     std::vector<double> InputLayer;
     std::vector<std::vector<Perceptron>> HiddenLayers;
+    std::vector<ActivationFunction *> Layer_Activations;
 
     ActivationFunction *act;
-    LossFunction * lossFunc ;
+    LossFunction *lossFunc;
 
 public:
     NeuralNetwork();
     ~NeuralNetwork();
 
-    void AssignLossFunction(LossFunction * lossFunc); 
+    void AssignLossFunction(LossFunction *lossFunc);
 
     void setInputsLayer(const std::vector<double> &Inp);
     void addLayer(int amount, ActivationFunction *act);
@@ -31,7 +32,7 @@ public:
 
     void TrainNN(std::vector<std::vector<double>> inp, std::vector<std::vector<double>> out, int epoch);
 
-    std::vector<double> getOutputs() ;
+    std::vector<double> getOutputs();
 
     void CheckHiddenLayerOutputs()
     {
@@ -46,10 +47,27 @@ public:
             }
         }
     }
+    void CheckInternalWeights(int layeridx, int percidx)
+    {
+        std::cout << "Weights for Layer " << layeridx + 1 << " Percepton : " << percidx << std::endl;
+        for (double d : HiddenLayers[layeridx][percidx].returnWeights())
+        {
+            std::cout << d << " ";
+        }
+        std::cout << std::endl;
+    }
+
+    void CheckHiddenLayerInp(int idx)
+    {
+        for (int i = 0; i < HiddenLayers[idx].size(); i++)
+        {
+            HiddenLayers[idx][i].printInp();
+        }
+    }
 
     void checkWeights()
     {
-        std::cout << std::endl ; 
+        std::cout << std::endl;
         int lastLayerIndex = HiddenLayers.size() - 1;
         for (int indexLayer = 0; indexLayer < lastLayerIndex + 1; indexLayer++)
         {

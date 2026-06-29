@@ -94,20 +94,22 @@ void SimpleBackPropogation()
 void MultipleHiddenLayers()
 {
     NeuralNetwork N; // 0 Bias and 1 Learning Rate
-    N.AssignLossFunction(new RootMSE() );
+    N.AssignLossFunction(new MSE()); // Change this later
     std::vector<std::vector<double>> inp = {{0.35, 0.7}};
     std::vector<std::vector<double>> out = {{0.5, 0.7}};
 
-    N.addLayer(2, new Sigmoid());
-    N.addLayer(2, new Sigmoid());
-    N.addLayer(2, new Sigmoid());
+    N.addLayer(2, new Sigmoid()); // Hidden Layer 1
+    N.addLayer(2, new Sigmoid()); // Hidden Layer 2
+    N.addLayer(2, new Sigmoid()); // Output Layer
 
-    std::vector<double> firstWeights = {0.2, 0.2};
-    std::vector<double> secondWeights = {0.3, 0.3};
-    std::vector<double> thirdWeight = {0.3, 0.9};
-    std::vector<double> fourthWeight = {0.2, 0.1};
-    std::vector<double> fifthWeight = {0.7, 0.55};
-    std::vector<double> sixthWeight = {0.6, 0.35};
+    std::vector<double> firstWeights = {0.2, 0.2};  // Hidden Layer 1
+    std::vector<double> secondWeights = {0.3, 0.3}; // Hidden Layer 1
+
+    std::vector<double> thirdWeight = {0.3, 0.9};  // Hidden Layer 2
+    std::vector<double> fourthWeight = {0.2, 0.1}; // Hidden Layer 2
+
+    std::vector<double> fifthWeight = {0.7, 0.55}; // Output Layer
+    std::vector<double> sixthWeight = {0.6, 0.35}; // Output Layer
 
     N.setInputsLayer(inp[0]);
 
@@ -120,26 +122,10 @@ void MultipleHiddenLayers()
 
     N.PassThrough();
 
-    std::cout << "OUTPUT\n";
-    for (double d : N.getOutputs())
-    {
-        std::cout << d << " ";
-    }
-    std::cout << std::endl;
-    std::cout << std::endl;
-
+    N.checkWeights() ; 
     N.TrainNN(inp, out, 1);
-
-    N.setInputsLayer(inp[0]);
-    N.PassThrough();
-
-    std::cout << "OUTPUT\n";
-    for (double d : N.getOutputs())
-    {
-        std::cout << d << " ";
-    }
-    std::cout << std::endl;
-    std::cout << std::endl;
+    N.checkWeights() ;
+    
 }
 void XORTraining()
 {

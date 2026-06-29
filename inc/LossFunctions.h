@@ -34,7 +34,7 @@ public:
     double calculateLoss2(double predicted, double trueval)
     {
         double res = 0;
-        res = (predicted - trueval) * (predicted) * (1 - predicted);
+        res = predicted - trueval;
         return res;
     }
 };
@@ -46,6 +46,7 @@ public:
     {
         return sqrt((new MSE())->calculateLoss(predicted, trueval));
     }
+
     double calculateLoss2(double predicted, double trueval)
     {
         double res = 0;
@@ -66,6 +67,20 @@ public:
             res += abs((trueval[i] - predicted[i]));
         }
         res /= size;
+        return res;
+    }
+};
+
+class BookLoss : public LossFunction
+{
+public:
+    double calculateLoss(std::vector<double> predicted, std::vector<double> trueval)
+    {
+        return 0.00 ;
+    }
+    double calculateLoss2(double predicted, double trueval)
+    {
+        double res = pow((trueval - predicted), 2);
         return res;
     }
 };
