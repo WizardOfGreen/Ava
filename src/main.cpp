@@ -123,8 +123,15 @@ void MultipleHiddenLayers()
     N.PassThrough();
 
     N.checkWeights() ; 
-    N.TrainNN(inp, out, 1);
+    N.TrainNN(inp, out, 10000);
     N.checkWeights() ;
+
+    N.setInputsLayer(inp[0]) ; 
+    std::cout << "Output Results :\n" ;
+    for ( double D : N.getOutputs() )
+    {
+        std::cout << D << std::endl ; 
+    }
     
 }
 void XORTraining()
@@ -197,7 +204,7 @@ int main()
     // XORTraining();
     // LossFunctionTests();
 
-    std::cout << "Program Ran to Completion\n";
+    std::cout << "Stroking my shit clean off \n";
     system("pause");
     system("cls");
     return 0;
