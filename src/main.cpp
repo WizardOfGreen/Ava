@@ -96,9 +96,6 @@ void MultipleHiddenLayers()
     NeuralNetwork N;                 // 0 Bias and 1 Learning Rate
     N.AssignLossFunction(new MSE()); // Change this later
     std::vector<std::vector<double>> inp = {{0.35, 0.7}};
-    std::vector<std::vector<double>> inp2 = {{0.25, 0.5}};
-    std::vector<std::vector<double>> inp3 = {{0.6, 0.2}};
-
     std::vector<std::vector<double>> out = {{0.5, 0.7}};
 
     N.addLayer(2, new Sigmoid()); // Hidden Layer 1
@@ -144,8 +141,6 @@ void MultipleHiddenLayers()
     {
         std::cout << D << std::endl;
     }
-
-    N.setInputsLayer(inp2[0]);
 }
 void XORTraining()
 {
