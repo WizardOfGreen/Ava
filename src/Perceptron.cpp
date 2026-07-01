@@ -21,6 +21,11 @@ void Perceptron::setActFunc(ActivationFunction *a)
     this->act = a;
 }
 
+ActivationFunction *Perceptron::getAct()
+{
+    return this->act    ;
+}
+
 double Perceptron::CalcY()
 {
     double res = 0;
@@ -32,6 +37,20 @@ double Perceptron::CalcY()
     this->Outputs = (res);
 
     return this->act->activate(res) ;
+}
+
+double Perceptron::returnNet()
+{
+        double res = 0;
+    res = res + this->bias;
+    for (int i = 0; i < this->numInputs; i++)
+    {
+        res = res + this->Inputs[i] * this->Weights[i];
+    }
+    this->Outputs = (res);
+
+    return this->Outputs ;
+
 }
 
 void Perceptron::setInp(const std::vector<double> &inp)

@@ -11,7 +11,7 @@ private:
     /* data */
 public:
     virtual double activate(double x) = 0;
-    virtual double derivative(double a) { return 0.0; };
+    virtual double activateDerivative(double a) { return 0.0; };
 };
 
 #endif

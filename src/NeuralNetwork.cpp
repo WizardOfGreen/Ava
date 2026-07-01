@@ -103,7 +103,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
 
             for (int idx = 0; idx < out[outInx].size(); idx++)
             {
-                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[(HiddenLayers.size() - 1)])->derivative(outps[idx]); // Works
+                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[(HiddenLayers.size() - 1)])->activateDerivative(outps[idx]); // Works
                 outputDeltas.push_back(delta);
             }
 
@@ -145,7 +145,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                             }
                             double PerRes = HiddenLayers[Layeridx][PercIdx].CalcY(); // CalcY Return Activated Value
 
-                            double der = (Layer_Activations[Layeridx])->derivative(PerRes);
+                            double der = (Layer_Activations[Layeridx])->activateDerivative(PerRes);
                             Err = Err * der;
                             hiddenLayerDeltas[Layeridx][PercIdx] = Err;
                             PerRes = HiddenLayers[Layeridx - 1][WeightIdx].CalcY();
@@ -163,7 +163,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                                 Err += w * hiddenLayerDeltas[Layeridx + 1][i];
                             }
 
-                            double der = (Layer_Activations[Layeridx])->derivative(PerRes);
+                            double der = (Layer_Activations[Layeridx])->activateDerivative(PerRes);
                             Err = Err * der;
                             hiddenLayerDeltas[Layeridx][PercIdx] = Err;
                             PerRes = this->InputLayer[WeightIdx];

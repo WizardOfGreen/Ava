@@ -26,7 +26,9 @@ public:
     ~Perceptron();
 
     void setActFunc(ActivationFunction *a);
+    ActivationFunction * getAct() ; 
     double CalcY();
+    double returnNet() ; 
 
     void printY()
     {
