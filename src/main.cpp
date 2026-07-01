@@ -93,47 +93,66 @@ void SimpleBackPropogation()
 
 void MultipleHiddenLayers()
 {
-    NeuralNetwork N; // 0 Bias and 1 Learning Rate
+    NeuralNetwork N;                 // 0 Bias and 1 Learning Rate
     N.AssignLossFunction(new MSE()); // Change this later
-    std::vector<std::vector<double>> inp = {{0.35, 0.7}};
-    std::vector<std::vector<double>> out = {{0.5, 0.7}};
+    std::vector<std::vector<double>> inp =
+        {
+            {0, 0}, {0, 1}, {1, 0}, {1, 1}};
+
+    std::vector<std::vector<double>> out =
+        {
+            {0}, {1}, {1}, {0}};
 
     N.addLayer(2, new Sigmoid()); // Hidden Layer 1
     N.addLayer(2, new Sigmoid()); // Hidden Layer 2
-    N.addLayer(2, new Sigmoid()); // Output Layer
+    N.addLayer(1, new Sigmoid());
 
     std::vector<double> firstWeights = {0.2, 0.2};  // Hidden Layer 1
     std::vector<double> secondWeights = {0.3, 0.3}; // Hidden Layer 1
 
-    std::vector<double> thirdWeight = {0.3, 0.9};  // Hidden Layer 2
-    std::vector<double> fourthWeight = {0.2, 0.1}; // Hidden Layer 2
-
-    std::vector<double> fifthWeight = {0.7, 0.55}; // Output Layer
-    std::vector<double> sixthWeight = {0.6, 0.35}; // Output Layer
+    std::vector<double> thirdWeight = {0.3, 0.9}; // Hidden Layer 2
 
     N.setInputsLayer(inp[0]);
 
     N.setLayerWeights(0, 0, firstWeights);
     N.setLayerWeights(0, 1, secondWeights);
     N.setLayerWeights(1, 0, thirdWeight);
-    N.setLayerWeights(1, 1, fourthWeight);
-    N.setLayerWeights(2, 0, fifthWeight);
-    N.setLayerWeights(2, 1, sixthWeight);
 
+    N.TrainNN(inp, out, 1000);
+
+    N.setInputsLayer(inp[0]);
     N.PassThrough();
-
-    N.checkWeights() ; 
-    N.TrainNN(inp, out, 10000);
-    N.checkWeights() ;
-
-    N.setInputsLayer(inp[0]) ; 
-    std::cout << "Output Results :\n" ;
-    for ( double D : N.getOutputs() )
+    std::cout << "Output Results :\n";
+    for (double D : N.getOutputs())
     {
-        std::cout << D << std::endl ; 
+        std::cout << D << std::endl;
     }
-    
+
+    N.setInputsLayer(inp[1]);
+    N.PassThrough();
+    std::cout << "Output Results :\n";
+    for (double D : N.getOutputs())
+    {
+        std::cout << D << std::endl;
+    }
+
+    N.setInputsLayer(inp[2]);
+    N.PassThrough();
+    std::cout << "Output Results :\n";
+    for (double D : N.getOutputs())
+    {
+        std::cout << D << std::endl;
+    }
+
+    N.setInputsLayer(inp[3]);
+    N.PassThrough();
+    std::cout << "Output Results :\n";
+    for (double D : N.getOutputs())
+    {
+        std::cout << D << std::endl;
+    }
 }
+
 void XORTraining()
 {
     NeuralNetwork N;

@@ -30,7 +30,7 @@ public:
     std::vector<double> CalcLayerOutputs(int index);
     void PassThrough();
 
-    void TrainNN(std::vector<std::vector<double>> inp, std::vector<std::vector<double>> out, int epoch);
+    void TrainNN(const std::vector<std::vector<double>>& inp, const std::vector<std::vector<double>>& out, int epoch);
 
     std::vector<double> getOutputs();
 

@@ -28,7 +28,7 @@ void NeuralNetwork::setInputsLayer(const std::vector<double> &Inp)
 void NeuralNetwork::addLayer(int amount, ActivationFunction *act)
 {
     this->HiddenLayers.push_back(std::vector<Perceptron>());
-    this->Layer_Activations.push_back( act  ) ; 
+    this->Layer_Activations.push_back(act);
 
     int last = HiddenLayers.size() - 1;
 
@@ -84,44 +84,35 @@ void NeuralNetwork::PassThrough()
     }
 }
 
-void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<std::vector<double>> out, int epoch)
+void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const std::vector<std::vector<double>> &out, int epoch)
 {
     int indexOfLastLayer = HiddenLayers.size() - 1;
     for (int i = 0; i < epoch; i++)
     {
-        std::vector<std::vector<double>> Ouputs;
         std::vector<double> outps;
         double learning_rate = 0.1;
         for (int outInx = 0; outInx < out.size(); outInx++)
         {
-            Ouputs.push_back(std::vector<double>());
 
-            for (int j = 0; j < inp.size(); j++)
-            {
-                setInputsLayer(inp[j]);
-                PassThrough();
-                outps = getOutputs();
-                Ouputs[outInx] = (outps);
-            }
+            setInputsLayer(inp[outInx]);
+            PassThrough();
+            outps = getOutputs();
 
-            std::vector<double> outpNeuronsError; // Errors of all the Output Neurons
-            double err = 0;
+            std::vector<double> outputDeltas; // Errors of all the Output Neurons
+            double delta = 0;
 
             for (int idx = 0; idx < out[outInx].size(); idx++)
             {
-                err = (Ouputs[outInx][idx] - out[outInx][idx]) * (new Sigmoid())->derivative(Ouputs[outInx][idx]); // This Works well , need a way for each Layer to Store their Activation Function
-                outpNeuronsError.push_back(err);
-            }
-
-            std::vector<std::vector<double>> hiddenLayerGradients;
-            for (int Layeridx = 0; Layeridx < HiddenLayers.size(); Layeridx++)
-            {
-                hiddenLayerGradients.push_back(std::vector<double>());
+                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[(HiddenLayers.size() - 1)])->derivative(outps[idx]); // Works
+                outputDeltas.push_back(delta);
             }
 
             std::vector<std::vector<double>> hiddenLayerDeltas;
+            std::vector<std::vector<double>> hiddenLayerGradients;
+
             for (int Layeridx = 0; Layeridx < HiddenLayers.size(); Layeridx++)
             {
+                hiddenLayerGradients.push_back(std::vector<double>());
                 hiddenLayerDeltas.push_back(std::vector<double>());
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
                 {
@@ -137,15 +128,14 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                     {
                         if (Layeridx == indexOfLastLayer) // EDGE CASE : Hidden layer is Output Layer
                         {
-                            double PerRes = HiddenLayers[Layeridx - 1][WeightIdx].CalcY();
-                            double Error = outpNeuronsError[PercIdx];
+                            double PerRes = HiddenLayers[Layeridx - 1][WeightIdx].CalcY(); // CalcY Return Activated Value
+                            double Error = outputDeltas[PercIdx];
                             hiddenLayerDeltas[Layeridx][PercIdx] = Error;
                             double Err = PerRes * Error; // This is the Gradient
                             hiddenLayerGradients[Layeridx].push_back(Err);
                         }
                         else if (Layeridx != 0) // EDGE CASE : Hidden layer is in the middle of Output and First Input Layer
                         {
-                            std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
                             double Err = 0;
 
                             for (int i = 0; i < hiddenLayerDeltas[Layeridx + 1].size(); i++)
@@ -153,9 +143,9 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                                 double w = HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx];
                                 Err += w * hiddenLayerDeltas[Layeridx + 1][i];
                             }
-                            double PerRes = HiddenLayers[Layeridx][PercIdx].CalcY();
+                            double PerRes = HiddenLayers[Layeridx][PercIdx].CalcY(); // CalcY Return Activated Value
 
-                            double der = ( Layer_Activations[Layeridx] )->derivative(PerRes);
+                            double der = (Layer_Activations[Layeridx])->derivative(PerRes);
                             Err = Err * der;
                             hiddenLayerDeltas[Layeridx][PercIdx] = Err;
                             PerRes = HiddenLayers[Layeridx - 1][WeightIdx].CalcY();
@@ -164,8 +154,7 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                         }
                         else if (Layeridx == 0) // EDGE CASE : Hidden layer is after Input Layer
                         {
-                            std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
-                            double PerRes = HiddenLayers[Layeridx][PercIdx].CalcY();
+                            double PerRes = HiddenLayers[Layeridx][PercIdx].CalcY(); // CalcY Return Activated Value
                             double Err = 0;
 
                             for (int i = 0; i < hiddenLayerDeltas[Layeridx + 1].size(); i++)
@@ -190,11 +179,16 @@ void NeuralNetwork::TrainNN(std::vector<std::vector<double>> inp, std::vector<st
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
                 {
                     std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
+                    double oldBias = HiddenLayers[Layeridx][PercIdx].returnBias();
+                    double newBias = oldBias - learning_rate * hiddenLayerDeltas[Layeridx][PercIdx];
+                    HiddenLayers[Layeridx][PercIdx].setBias(newBias);
+
                     for (int WeightIdx = 0; WeightIdx < newWeights.size(); WeightIdx++)
                     {
+                        int weightCount = newWeights.size();
                         double oldW = newWeights[WeightIdx];
 
-                        double newWeight = oldW - learning_rate * hiddenLayerGradients[Layeridx][(PercIdx * 2) + WeightIdx];
+                        double newWeight = oldW - learning_rate * hiddenLayerGradients[Layeridx][PercIdx * weightCount + WeightIdx];
                         newWeights[WeightIdx] = newWeight;
                     }
                     HiddenLayers[Layeridx][PercIdx].setWeights(newWeights);
