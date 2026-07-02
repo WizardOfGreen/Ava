@@ -113,10 +113,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
             {
                 delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[indexOfLastLayer])->Derivative(outps[idx]); // Works
                 outputDeltas.push_back(delta);                                                                           // Delta for Output Perceptron 0 and 1
-                std::cout << "Delta " << idx << " : " << delta << std::endl;
             }
-
-            system("pause");
 
             for (int Layeridx = 0; Layeridx < HiddenLayers.size(); Layeridx++)
             {
@@ -133,6 +130,11 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                 }
             }
 
+            double Err = 0;
+            double grad;
+            double resPast;
+            double sum = 0;
+
             for (int Layeridx = indexOfLastLayer; Layeridx >= 0; Layeridx--)
             {
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
@@ -147,7 +149,6 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
 
                             hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
                             weightGradients[Layeridx][PercIdx][WeightIdx] = Err;
-                            std::cout << "Error for " << Layeridx << " " << PercIdx << " " << WeightIdx << " : " << Err << std::endl;
                         }
                         else if (Layeridx == indexOfLastLayer) // EDGE CASE : Hidden layer is Output Layer
                         {
@@ -156,51 +157,52 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                             hiddenLayerDeltas[Layeridx][PercIdx] = Error;
                             double Err = PerRes * Error; // This is the Gradient
                             weightGradients[Layeridx][PercIdx][WeightIdx] = Err;
-                            std::cout << "Error for " << Layeridx << " " << PercIdx << " " << WeightIdx << " : " << Err << std::endl;
                         }
                         else if (Layeridx != 0) // EDGE CASE : Hidden layer is in the middle of Output and First Input Layer
                         {
-                            double Err = 0;
 
-                            for (int i = 0; i < hiddenLayerDeltas[Layeridx + 1].size(); i++)
+                            double act = HiddenLayers[Layeridx][PercIdx].returnNet();
+                            double d = this->Layer_Activations[Layeridx]->activate(act);
+                            double derivative = this->Layer_Activations[Layeridx]->Derivative(d);
+
+                            for (int i = 0; i < HiddenLayers[Layeridx + 1].size(); i++)
                             {
-                                double w = HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx];
-                                Err += w * hiddenLayerDeltas[Layeridx + 1][i];
+                                sum = sum + HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx] * hiddenLayerDeltas[Layeridx + 1][i];
                             }
-                            double PerRes = HiddenLayers[Layeridx][PercIdx].retAct(); // CalcY Return Activated Value
+                            double delta = derivative * sum;
+                            hiddenLayerDeltas[Layeridx][PercIdx] = delta;
 
-                            double der = (Layer_Activations[Layeridx])->activateDerivative(PerRes);
-                            Err = Err * der;
-                            hiddenLayerDeltas[Layeridx][PercIdx] = Err;
-                            PerRes = HiddenLayers[Layeridx - 1][WeightIdx].retAct();
-                            Err = Err * PerRes;
-                            weightGradients[Layeridx][PercIdx][WeightIdx] = Err;
-                            std::cout << "Error for " << Layeridx << " " << PercIdx << " " << WeightIdx << " : " << Err << std::endl;
+                            for (int i = 0; i < HiddenLayers[Layeridx - 1].size(); i++)
+                            {
+                                resPast = HiddenLayers[Layeridx - 1][i].retAct();
+                                grad = resPast * delta;
+                                weightGradients[Layeridx][PercIdx][i] = grad;
+                            }
                         }
                         else if (Layeridx == 0) // EDGE CASE : Hidden layer is after Input Layer
                         {
-                            double PerRes = HiddenLayers[Layeridx][PercIdx].retAct();
-                            double Err = 0;
+                            double act = HiddenLayers[Layeridx][PercIdx].returnNet();
+                            double d = this->Layer_Activations[Layeridx]->activate(act);
+                            double derivative = this->Layer_Activations[Layeridx]->Derivative(d);
 
-                            for (int i = 0; i < hiddenLayerDeltas[Layeridx + 1].size(); i++)
+                            for (int i = 0; i < HiddenLayers[Layeridx + 1].size(); i++)
                             {
-                                double w = HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx];
-                                Err += w * hiddenLayerDeltas[Layeridx + 1][i];
+                                sum = sum + HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx] * hiddenLayerDeltas[Layeridx + 1][i];
                             }
+                            double delta = derivative * sum;
+                            hiddenLayerDeltas[Layeridx][PercIdx] = delta;
 
-                            double der = (Layer_Activations[Layeridx])->activateDerivative(PerRes);
-                            Err = Err * der;
-                            hiddenLayerDeltas[Layeridx][PercIdx] = Err;
-                            PerRes = this->InputLayer[WeightIdx];
-                            Err = Err * PerRes;
-                            weightGradients[Layeridx][PercIdx][WeightIdx] = Err;
-                            std::cout << "Error for " << Layeridx << " " << PercIdx << " " << WeightIdx << " : " << Err <<  std::endl;
+                            for (int i = 0; i < this->InputLayer.size(); i++)
+                            {
+                                resPast = this->InputLayer[i];
+                                grad = resPast * delta;
+                                weightGradients[Layeridx][PercIdx][i] = grad;
+                            }
                         }
                     }
                 }
             } // End of ERROR COMPUTING
 
-            system("pause");
 
             for (int Layeridx = 0; Layeridx <= indexOfLastLayer; Layeridx++)
             {

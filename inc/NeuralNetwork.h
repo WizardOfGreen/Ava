@@ -36,21 +36,26 @@ public:
     std::vector<double> getOutputs();
     void PrintOutInfo()
     {
+        std::cout << "Layer\tPercep\tBias\t\tWeight\t\t\tNetOutput\tActivatedOutput\t\n";
         for (int Layeridx = 0; Layeridx < HiddenLayers.size(); Layeridx++)
         {
-            std::cout << "Layer " << Layeridx << std::endl;
+            std::cout << Layeridx << "\t";
             for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
             {
-                std::cout << "Perceptron " << PercIdx << std::endl;
-                std::cout << "Bias : " << HiddenLayers[Layeridx][PercIdx].returnBias() << std::endl ;
+                std::cout << PercIdx << "\t";
                 std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
+
+                std::cout << HiddenLayers[Layeridx][PercIdx].returnBias() << "\t";
                 for (int WeightIdx = 0; WeightIdx < newWeights.size(); WeightIdx++)
                 {
-                    std::cout << "Weight " << WeightIdx << " : " << newWeights[WeightIdx] << std::endl;
+                    std::cout << newWeights[WeightIdx] << ",";
                 }
-                std::cout << "Result Net : " << HiddenLayers[Layeridx][PercIdx].returnNet() << std::endl ; 
-                std::cout << "Result Act : " << HiddenLayers[Layeridx][PercIdx].retAct() << std::endl ; 
+                std::cout << "\t";
+                std::cout << HiddenLayers[Layeridx][PercIdx].returnNet() << "\t";
+                std::cout << HiddenLayers[Layeridx][PercIdx].retAct() ;
+                std::cout << std::endl << "\t" ;
             }
+            std::cout << std::endl ; 
         }
     }
 

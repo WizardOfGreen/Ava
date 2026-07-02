@@ -123,9 +123,15 @@ void MultipleHiddenLayers()
     N.FeedForward();
     std::cout << "OUTPUT RESULTS BEFORE BACKPROPAGATION :\n";
     N.PrintOutInfo();
+    std::cout << "Output\n";
+    for (double D : N.getOutputs())
+    {
+        std::cout << D << std::endl;
+    }
+    N.TrainNN(inp, out, 1, 0.1);
 
-    N.TrainNN(inp , out , 1 , 0.1 ) ; 
-
+    std::cout << "OUTPUT RESULTS AFTER BACKPROPAGATION :\n";
+    N.PrintOutInfo();
     std::cout << "Output\n";
     for (double D : N.getOutputs())
     {
