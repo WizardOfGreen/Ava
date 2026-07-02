@@ -101,19 +101,19 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
             FeedForward();
             outps = getOutputs();
 
-            std::vector<double> outputDeltas; // Errors of all the Output Neurons
+            std::vector<double> outputDeltas;
+            std::vector<std::vector<double>> hiddenLayerDeltas;
+            std::vector<std::vector<double>> hiddenLayerGradients;
+
             double delta = 0;
 
-            std::cout << "LOSS RESULTS : " << this->lossFunc->calculateLoss2(outps[0], out[outInx][0]) << std::endl ; 
+            std::cout << "LOSS RESULTS : " << this->lossFunc->calculateLoss2(outps[0], out[outInx][0]) << std::endl;
 
             for (int idx = 0; idx < out[outInx].size(); idx++)
             {
                 delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[(HiddenLayers.size() - 1)])->Derivative(outps[idx]); // Works
                 outputDeltas.push_back(delta);
             }
-
-            std::vector<std::vector<double>> hiddenLayerDeltas;
-            std::vector<std::vector<double>> hiddenLayerGradients;
 
             for (int Layeridx = 0; Layeridx < HiddenLayers.size(); Layeridx++)
             {
@@ -133,11 +133,11 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                     {
                         if (indexOfLastLayer == 0) // Works in One Case
                         {
-                            double Inp = this->InputLayer[WeightIdx] ; 
+                            double Inp = this->InputLayer[WeightIdx];
                             double Err = 0;
 
                             double w = HiddenLayers[Layeridx][PercIdx].returnWeights()[WeightIdx];
-                            Err = Inp * outputDeltas[PercIdx] ;
+                            Err = Inp * outputDeltas[PercIdx];
                             hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
 
                             hiddenLayerGradients[Layeridx].push_back(Err);
