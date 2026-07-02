@@ -107,7 +107,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
 
             double delta = 0;
 
-            std::cout << "LOSS RESULTS : " << this->lossFunc->calculateLoss2(outps[0], out[outInx][0]) << std::endl;
+            // std::cout << "LOSS RESULTS : " << this->lossFunc->calculateLoss2(outps[0], out[outInx][0]) << std::endl;
 
             for (int idx = 0; idx < out[outInx].size(); idx++)
             {
@@ -134,12 +134,10 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                         if (indexOfLastLayer == 0) // Works in One Case
                         {
                             double Inp = this->InputLayer[WeightIdx];
-                            double Err = 0;
-
                             double w = HiddenLayers[Layeridx][PercIdx].returnWeights()[WeightIdx];
-                            Err = Inp * outputDeltas[PercIdx];
-                            hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
+                            double Err = Inp * outputDeltas[PercIdx];
 
+                            hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
                             hiddenLayerGradients[Layeridx].push_back(Err);
                         }
                         else if (Layeridx == indexOfLastLayer) // EDGE CASE : Hidden layer is Output Layer

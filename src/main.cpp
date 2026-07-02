@@ -156,7 +156,7 @@ void XORTraining()
     N.setLayerWeights(0, 1, {-5.0, -5.0});
     N.setLayerWeights(1, 0, {7.5, 7.5});
 
-    N.TrainNN(inp, out, 16, 0.1);
+    N.TrainNN(inp, out, 1 , 0.1);
     for (int i = 0; i < 4; i++)
     {
         N.setInputsLayer(inp[i]);
@@ -413,8 +413,8 @@ void ActivationTests()
 
 int main()
 {
-    SingleLayerBP();
-    // MultipleHiddenLayers();
+    // SingleLayerBP();
+    MultipleHiddenLayers();
     // XORSolved() ;
     // XORTraining();
     // LossFunctionTests();
