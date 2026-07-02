@@ -17,6 +17,7 @@ public:
         double res = x * (1 - x);
         return res;
     }
+    
     double Derivative(double a)
     {
         double res = a * (1 - a);

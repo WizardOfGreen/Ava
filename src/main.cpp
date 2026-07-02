@@ -92,7 +92,7 @@ void SingleLayerBP()
 
 void MultipleHiddenLayers()
 {
-    NeuralNetwork N;                 // 1 Bias and 1 Learning Rate
+    NeuralNetwork N;                 // Learning Rate 0.1 , Default Bias 0.5 on Trainable Bias.
     N.AssignLossFunction(new MSE()); // Change this later
     std::vector<std::vector<double>> inp = {{0.35, 0.7}};
     std::vector<std::vector<double>> out = {{0.5, 0.7}};
@@ -100,7 +100,6 @@ void MultipleHiddenLayers()
     N.addLayer(2, new Sigmoid()); // Hidden Layer 1
     N.addLayer(2, new Sigmoid()); // Hidden Layer 2
     N.addLayer(2, new Sigmoid()); // Hidden Layer 3
-    N.addLayer(2, new Sigmoid()); // Output Layer
 
     std::vector<double> firstWeights = {0.2, 0.2};  // Hidden Layer 1
     std::vector<double> secondWeights = {0.3, 0.3}; // Hidden Layer 1
@@ -119,29 +118,21 @@ void MultipleHiddenLayers()
     N.setLayerWeights(1, 1, fourthWeight);
     N.setLayerWeights(2, 0, fifthWeight);
     N.setLayerWeights(2, 1, sixthWeight);
-    N.setLayerWeights(3, 0, secondWeights);
-    N.setLayerWeights(3, 1, fifthWeight);
 
     N.setInputsLayer(inp[0]);
     N.FeedForward();
     std::cout << "OUTPUT RESULTS BEFORE BACKPROPAGATION :\n";
     N.PrintOutInfo();
 
-    for (double D : N.getOutputs())
-    {
-        std::cout << D << std::endl;
-    }
-    N.TrainNN(inp, out, 1, 0.1);
+    N.TrainNN(inp , out , 1 , 0.1 ) ; 
 
-    std::cout << "OUTPUT RESULTS AFTER BACKPROPAGATION :\n";
-    N.PrintOutInfo();
-
-    N.setInputsLayer(inp[0]);
+    std::cout << "Output\n";
     for (double D : N.getOutputs())
     {
         std::cout << D << std::endl;
     }
 }
+
 void XORTraining()
 {
     NeuralNetwork N;
@@ -156,7 +147,7 @@ void XORTraining()
     N.setLayerWeights(0, 1, {-5.0, -5.0});
     N.setLayerWeights(1, 0, {7.5, 7.5});
 
-    N.TrainNN(inp, out, 1 , 0.1);
+    N.TrainNN(inp, out, 1, 0.1);
     for (int i = 0; i < 4; i++)
     {
         N.setInputsLayer(inp[i]);
@@ -411,6 +402,25 @@ void ActivationTests()
     SoftMaxTest();
 }
 
+void singlePerceptronTest()
+{
+    Perceptron P;
+    std::vector<double> inp = {0.790009, 0.668941};
+    std::vector<double> w = {0.6, 0.35};
+    double b = 0.5;
+    P.setActFunc(new Sigmoid());
+    P.setWeights(w);
+    P.setInp(inp);
+    P.setBias(b);
+
+    double exp = (inp[0] * w[0]) + (inp[1] * w[1]) + (1 * b);
+
+    std::cout << "Inputs : " << inp[0] << " " << inp[1] << std::endl;
+    std::cout << "OutputActivation : " << P.retAct() << std::endl;
+    std::cout << "OutputNet : " << P.returnNet() << std::endl;
+    std::cout << "Expected Output : " << exp << std::endl;
+}
+
 int main()
 {
     // SingleLayerBP();
@@ -420,6 +430,7 @@ int main()
     // LossFunctionTests();
     // FeedForwardTest();
     // ActivationTests();
+    // singlePerceptronTest() ;
 
     std::cout << "Program Ran Successfully\n";
     system("pause");

@@ -29,15 +29,14 @@ ActivationFunction *Perceptron::getAct()
 double Perceptron::returnNet()
 {
     double res = 0;
-    res = res + this->bias;
+    res = res + (this->bias * 1);
     for (int i = 0; i < this->numInputs; i++)
     {
         res = res + this->Inputs[i] * this->Weights[i];
     }
-    this->Outputs = (res);
+    this->Outputs = res;
 
     return res ;
-
 }
 
 double Perceptron::retAct()
@@ -49,23 +48,11 @@ double Perceptron::retAct()
 void Perceptron::setInp(const std::vector<double> &inp)
 {
     this->Inputs.clear();
-
     this->numInputs = inp.capacity();
+
     for (double x : inp)
     {
         this->Inputs.push_back(x);
-    }
-
-    if (this->Inputs.size() > this->Weights.size())
-        this->setWeights();
-}
-
-void Perceptron::setWeights()
-{
-    this->Weights.clear();
-    while (this->Weights.size() < this->Inputs.size())
-    {
-        this->Weights.push_back(1);
     }
 }
 
@@ -92,9 +79,6 @@ void Perceptron::TrainPerceptron(std::vector<double> inp, double out)
     {
         this->Inputs.push_back(x);
     }
-
-    if (this->Inputs.size() > this->Weights.size())
-        this->setWeights(); // Sets weights to a basic amount with size the same as input.
 
     double res = 0;
     res = res + this->bias;

@@ -48,6 +48,8 @@ public:
                 {
                     std::cout << "Weight " << WeightIdx << " : " << newWeights[WeightIdx] << std::endl;
                 }
+                std::cout << "Result Net : " << HiddenLayers[Layeridx][PercIdx].returnNet() << std::endl ; 
+                std::cout << "Result Act : " << HiddenLayers[Layeridx][PercIdx].retAct() << std::endl ; 
             }
         }
     }

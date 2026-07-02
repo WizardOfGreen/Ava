@@ -11,7 +11,7 @@ private:
     ActivationFunction *act;
 
     int numInputs = 0;
-    double bias = 1;
+    double bias = 0.5;
 
     std::vector<double> Inputs;
     std::vector<double> Weights;
@@ -46,7 +46,6 @@ public:
     }
 
     void setInp(const std::vector<double> &inp);
-    void setWeights();
     void setWeights(std::vector<double> w);
     void setBias(const double b);
 
