@@ -36,7 +36,7 @@ void XORSolved()
     for (int i = 0; i < 4; i++)
     {
         N.setInputsLayer(inp[i]);
-        N.PassThrough();
+        N.FeedForward();
 
         std::cout << "OUTPUT\n";
         for (double d : N.getOutputs())
@@ -50,7 +50,7 @@ void XORSolved()
 void SimpleBackPropogation()
 {
     NeuralNetwork N;
-    N.AssignLossFunction(new RootMSE());
+    N.AssignLossFunction(new MSE());
     std::vector<std::vector<double>> inp = {{0.35, 0.7}};
     std::vector<std::vector<double>> out = {{0.5}};
 
@@ -67,9 +67,9 @@ void SimpleBackPropogation()
     N.setLayerWeights(0, 1, secondWeights);
     N.setLayerWeights(1, 0, thirdWeight);
 
-    N.PassThrough();
+    N.FeedForward();
 
-    std::cout << "OUTPUT\n";
+    std::cout << "OUTPUT BEFORE BACKPROPOGATION\n";
     for (double d : N.getOutputs())
     {
         std::cout << d << " ";
@@ -77,12 +77,12 @@ void SimpleBackPropogation()
     std::cout << std::endl;
     std::cout << std::endl;
 
-    N.TrainNN(inp, out, 1000);
+    N.TrainNN(inp, out, 575 );
 
     N.setInputsLayer(inp[0]);
-    N.PassThrough();
+    N.FeedForward();
 
-    std::cout << "OUTPUT\n";
+    std::cout << "OUTPUT AFTER BACKPROPOGATION\n";
     for (double d : N.getOutputs())
     {
         std::cout << d << " ";
@@ -124,16 +124,14 @@ void MultipleHiddenLayers()
     N.setLayerWeights(3, 1, fifthWeight);
 
     N.setInputsLayer(inp[0]);
-    N.PassThrough();
+    N.FeedForward();
     std::cout << "Output Results :\n";
     for (double D : N.getOutputs())
     {
         std::cout << D << std::endl;
     }
 
-    N.checkWeights();
     N.TrainNN(inp, out, 10000);
-    N.checkWeights();
 
     N.setInputsLayer(inp[0]);
     std::cout << "Output Results :\n";
@@ -160,7 +158,7 @@ void XORTraining()
     for (int i = 0; i < 4; i++)
     {
         N.setInputsLayer(inp[i]);
-        N.PassThrough();
+        N.FeedForward();
 
         std::cout << "Inputs :" << inp[i][0] << " " << inp[i][1] << std::endl;
         std::cout << "Outputs:" << N.getOutputs()[0] << std::endl;
@@ -204,13 +202,222 @@ void LossFunctionTests()
     MSETest();
 }
 
+void PrintFeedForwardResults(NeuralNetwork &N, std::vector<double> &inp1, std::vector<double> &out1)
+{
+    std::cout << "INPUT : ";
+    for (double d : inp1)
+    {
+        std::cout << d << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "OUTPUT: ";
+    for (double d : N.getOutputs())
+    {
+        std::cout << d << " ";
+    }
+    std::cout << std::endl;
+
+    std::cout << "Expected Output : ";
+    for (double d : out1)
+    {
+        std::cout << d << " ";
+    }
+    std::cout << std::endl;
+}
+
+void FFTest1()
+{
+    std::cout << "Linear TEST :\n";
+    NeuralNetwork N;
+    std::vector<double> inp1 = {2, 3};
+    std::vector<double> w1 = {4, 5};
+    std::vector<double> out1 = {24};
+    double b1 = 1;
+
+    N.addLayer(1, new StepFunc()); // Might not be a Step Function !
+    N.setLayerWeights(0, 0, w1);
+    N.setLayerBias(0, 0, b1);
+
+    N.setInputsLayer(inp1);
+    N.FeedForward();
+    PrintFeedForwardResults(N, inp1, out1);
+}
+
+void FFTest2()
+{
+    std::cout << "Sigmoid TEST :\n";
+    NeuralNetwork N;
+    std::vector<double> inp1 = {1, 2};
+    std::vector<double> w1 = {0.5, -0.25};
+    std::vector<double> out1 = {0.5249791875};
+    double b1 = 0.1;
+
+    N.addLayer(1, new Sigmoid());
+    N.setLayerWeights(0, 0, w1);
+    N.setLayerBias(0, 0, b1);
+
+    N.setInputsLayer(inp1);
+    N.FeedForward();
+    PrintFeedForwardResults(N, inp1, out1);
+}
+
+void FFTest3()
+{
+    std::cout << "RELU TEST :\n";
+    NeuralNetwork N;
+    std::vector<double> inp1 = {-1, 2};
+    std::vector<double> w1 = {1, -2};
+    std::vector<double> w2 = {-3, 4};
+    std::vector<double> w3 = {2, 3};
+
+    std::vector<double> out1 = {28};
+    double b1 = 1;
+    double b2 = -2;
+    double b3 = 1;
+
+    N.addLayer(2, new ReLU());
+    N.addLayer(1, new ReLU());
+
+    N.setLayerWeights(0, 0, w1);
+    N.setLayerWeights(0, 1, w2);
+    N.setLayerWeights(1, 0, w3);
+
+    N.setLayerBias(0, 0, b1);
+    N.setLayerBias(0, 1, b2);
+    N.setLayerBias(1, 0, b3);
+
+    N.setInputsLayer(inp1);
+    N.FeedForward();
+    PrintFeedForwardResults(N, inp1, out1);
+}
+
+void FFTest4()
+{
+    std::cout << "Final Sigmoid TEST :\n";
+    NeuralNetwork N;
+    std::vector<double> inp1 = {0.05, 0.10};
+    std::vector<double> w1 = {0.15, 0.20};
+    std::vector<double> w2 = {0.25, 0.30};
+    std::vector<double> w3 = {0.40, 0.45};
+    std::vector<double> w4 = {0.5, 0.55};
+
+    std::vector<double> out1 = {0.751365070, 0.772928465};
+    double b1 = 0.35;
+    double b2 = 0.35;
+    double b3 = 0.6;
+    double b4 = 0.6;
+
+    N.addLayer(2, new Sigmoid());
+    N.addLayer(2, new Sigmoid());
+
+    N.setLayerWeights(0, 0, w1);
+    N.setLayerWeights(0, 1, w2);
+    N.setLayerWeights(1, 0, w3);
+    N.setLayerWeights(1, 1, w4);
+
+    N.setLayerBias(0, 0, b1);
+    N.setLayerBias(0, 1, b2);
+    N.setLayerBias(1, 0, b3);
+    N.setLayerBias(1, 1, b4);
+
+    N.setInputsLayer(inp1);
+    N.FeedForward();
+    PrintFeedForwardResults(N, inp1, out1);
+}
+
+void FeedForwardTest()
+{
+    FFTest1();
+    FFTest2();
+    FFTest3();
+    FFTest4();
+}
+
+void SigmoidTest()
+{
+    std::cout << "Sigmoid Activation Test : \n";
+
+    ActivationFunction *act = new Sigmoid();
+    std::vector<double> inputs = {-5.0, -2.0, -1.0, 0.0, 1.0, 2.0, 5.0};
+    std::vector<double> outputs = {0.006692851, 0.119202922, 0.268941421, 0.500000000, 0.731058579, 0.880797078, 0.993307149};
+    std::vector<double> derivative = {0.006648057, 0.104993585, 0.196611933, 0.250000000, 0.196611933, 0.104993585, 0.006648057};
+
+    for (int i = 0; i < inputs.size(); i++)
+    {
+        std::cout << "Input :\t" << inputs[i] << "\tExpected :\t" << outputs[i] << "\tResult :\t" << act->activate(inputs[i]) << std::endl;
+    }
+
+    std::cout << "Sigmoid Derivative Test : \n";
+    for (int i = 0; i < outputs.size(); i++)
+    {
+        std::cout << "Input :\t" << outputs[i] << "\tExpected :\t" << derivative[i] << "\tResult :\t" << act->activateDerivative(inputs[i]) << std::endl;
+    }
+}
+
+void ReluTest()
+{
+    std::cout << "ReLu Activation Test : \n";
+
+    ActivationFunction *act = new ReLU();
+    std::vector<double> inputs = {-10, -1, 0, 1, 5};
+    std::vector<double> outputs = {0, 0, 0, 1, 5};
+    std::vector<double> derivative = {0, 0, 0, 1, 1};
+
+    for (int i = 0; i < inputs.size(); i++)
+    {
+        std::cout << "Input :\t" << inputs[i] << "\tExpected :\t" << outputs[i] << "\tResult :\t" << act->activate(inputs[i]) << std::endl;
+    }
+
+    std::cout << "ReLu Derivative Test : \n";
+    for (int i = 0; i < outputs.size(); i++)
+    {
+        std::cout << "Input :\t" << outputs[i] << "\tExpected :\t" << derivative[i] << "\tResult :\t" << act->activateDerivative(inputs[i]) << std::endl;
+    }
+}
+
+void TanHTest()
+{
+    std::cout << "TanH Activation Test : \n";
+
+    ActivationFunction *act = new TanH();
+    std::vector<double> inputs = {-5, -2, -1, 0, 1, 2, 5};
+    std::vector<double> outputs = {-0.999909204, -0.964027580, -0.761594156, 0.000000000, 0.761594156, 0.964027580, 0.999909204};
+    std::vector<double> derivative = {0.000181575,0.070650825,0.419974342,1.000000000,0.419974342,0.070650825,0.000181575};
+
+    for (int i = 0; i < inputs.size(); i++)
+    {
+        std::cout << "Input :\t" << inputs[i] << "\tExpected :\t" << outputs[i] << "\tResult :\t" << act->activate(inputs[i]) << std::endl;
+    }
+
+    std::cout << "TanH Derivative Test : \n";
+    for (int i = 0; i < outputs.size(); i++)
+    {
+        std::cout << "Input :\t" << outputs[i] << "\tExpected :\t" << derivative[i] << "\tResult :\t" << act->activateDerivative(inputs[i]) << std::endl;
+    }
+}
+
+void SoftMaxTest()
+{
+}
+
+void ActivationTests()
+{
+    SigmoidTest();
+    ReluTest();
+    TanHTest();
+    SoftMaxTest();
+}
+
 int main()
 {
-    // SimpleBackPropogation();
+    SimpleBackPropogation();
     // MultipleHiddenLayers();
     // XORSolved() ;
     // XORTraining();
     // LossFunctionTests();
+    // FeedForwardTest();
+    // ActivationTests();
 
     std::cout << "Program Ran Successfully\n";
     system("pause");
