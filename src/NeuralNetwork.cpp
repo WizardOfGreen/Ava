@@ -111,7 +111,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
 
             for (int idx = 0; idx < out[outInx].size(); idx++)
             {
-                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[(HiddenLayers.size() - 1)])->Derivative(outps[idx]); // Works
+                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[indexOfLastLayer])->Derivative(outps[idx]); // Works
                 outputDeltas.push_back(delta);
             }
 
