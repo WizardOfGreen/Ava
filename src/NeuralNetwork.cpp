@@ -104,6 +104,8 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
             std::vector<double> outputDeltas; // Errors of all the Output Neurons
             double delta = 0;
 
+            std::cout << "LOSS RESULTS : " << this->lossFunc->calculateLoss2(outps[0], out[outInx][0]) << std::endl ; 
+
             for (int idx = 0; idx < out[outInx].size(); idx++)
             {
                 delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[(HiddenLayers.size() - 1)])->Derivative(outps[idx]); // Works

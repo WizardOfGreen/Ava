@@ -18,6 +18,7 @@ public:
         res /= size;
         return res;
     }
+    
     double calculateLoss2(double predicted, double trueval)
     {
         double res = 0;

@@ -413,8 +413,8 @@ void ActivationTests()
 
 int main()
 {
-    // SingleLayerBP();
-    MultipleHiddenLayers();
+    SingleLayerBP();
+    // MultipleHiddenLayers();
     // XORSolved() ;
     // XORTraining();
     // LossFunctionTests();
