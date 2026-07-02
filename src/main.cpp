@@ -51,18 +51,18 @@ void SimpleBackPropogation()
 {
     NeuralNetwork N;
     N.AssignLossFunction(new MSE());
-    std::vector<std::vector<double>> inp = {{1.0 , 2.0}};
+    std::vector<std::vector<double>> inp = {{1.0, 2.0}};
     std::vector<std::vector<double>> out = {{1}};
 
     N.addLayer(1, new Sigmoid());
 
-    std::vector<double> firstWeights = {0.5 , -0.3};
-    double b = 0.1 ; 
+    std::vector<double> firstWeights = {0.5, -0.3};
+    double b = 0.1;
 
     N.setInputsLayer(inp[0]);
 
     N.setLayerWeights(0, 0, firstWeights);
-    N.setLayerBias(0,0,b) ; 
+    N.setLayerBias(0, 0, b);
 
     N.FeedForward();
 
@@ -72,19 +72,21 @@ void SimpleBackPropogation()
         std::cout << d << " ";
     }
     std::cout << std::endl;
-    std::cout << std::endl;
 
-    N.TrainNN(inp, out, 575 , 0.1);
+    N.TrainNN(inp, out, 1, 0.1);
 
     N.setInputsLayer(inp[0]);
     N.FeedForward();
 
+    N.PrintOutInfo() ; 
+
     std::cout << "OUTPUT AFTER BACKPROPOGATION\n";
+
     for (double d : N.getOutputs())
     {
         std::cout << d << " ";
     }
-    std::cout << std::endl;
+
     std::cout << std::endl;
 }
 
@@ -128,7 +130,7 @@ void MultipleHiddenLayers()
         std::cout << D << std::endl;
     }
 
-    N.TrainNN(inp, out, 10000 , 0.1);
+    N.TrainNN(inp, out, 10000, 0.1);
 
     N.setInputsLayer(inp[0]);
     std::cout << "Output Results :\n";
@@ -151,7 +153,7 @@ void XORTraining()
     N.setLayerWeights(0, 1, {-5.0, -5.0});
     N.setLayerWeights(1, 0, {7.5, 7.5});
 
-    N.TrainNN(inp, out, 16 , 0.1);
+    N.TrainNN(inp, out, 16, 0.1);
     for (int i = 0; i < 4; i++)
     {
         N.setInputsLayer(inp[i]);

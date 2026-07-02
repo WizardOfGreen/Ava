@@ -97,7 +97,6 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
         std::vector<double> outps;
         for (int outInx = 0; outInx < out.size(); outInx++)
         {
-
             setInputsLayer(inp[outInx]);
             FeedForward();
             outps = getOutputs();
@@ -107,7 +106,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
 
             for (int idx = 0; idx < out[outInx].size(); idx++)
             {
-                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[(HiddenLayers.size() - 1)])->activateDerivative(outps[idx]); // Works
+                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[(HiddenLayers.size() - 1)])->Derivative(outps[idx]); // Works
                 outputDeltas.push_back(delta);
             }
 
@@ -130,9 +129,20 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                 {
                     for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
                     {
-                        if (Layeridx == indexOfLastLayer) // EDGE CASE : Hidden layer is Output Layer
+                        if (indexOfLastLayer == 0) // Works in One Case
                         {
-                            double PerRes = HiddenLayers[Layeridx - 1][WeightIdx].retAct(); // CalcY Return Activated Value
+                            double Inp = this->InputLayer[WeightIdx] ; 
+                            double Err = 0;
+
+                            double w = HiddenLayers[Layeridx][PercIdx].returnWeights()[WeightIdx];
+                            Err = Inp * outputDeltas[PercIdx] ;
+                            hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
+
+                            hiddenLayerGradients[Layeridx].push_back(Err);
+                        }
+                        else if (Layeridx == indexOfLastLayer) // EDGE CASE : Hidden layer is Output Layer
+                        {
+                            double PerRes = HiddenLayers[Layeridx - 1][WeightIdx].retAct(); // Return Activated Value
                             double Error = outputDeltas[PercIdx];
                             hiddenLayerDeltas[Layeridx][PercIdx] = Error;
                             double Err = PerRes * Error; // This is the Gradient
@@ -158,7 +168,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                         }
                         else if (Layeridx == 0) // EDGE CASE : Hidden layer is after Input Layer
                         {
-                            double PerRes = HiddenLayers[Layeridx][PercIdx].retAct(); // CalcY Return Activated Value
+                            double PerRes = HiddenLayers[Layeridx][PercIdx].retAct();
                             double Err = 0;
 
                             for (int i = 0; i < hiddenLayerDeltas[Layeridx + 1].size(); i++)
@@ -184,15 +194,14 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                 {
                     double oldBias = HiddenLayers[Layeridx][PercIdx].returnBias();
                     double newBias = oldBias - learning_rate * hiddenLayerDeltas[Layeridx][PercIdx];
-                    HiddenLayers[Layeridx][PercIdx].setBias(newBias);
 
+                    HiddenLayers[Layeridx][PercIdx].setBias(newBias);
                     std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
 
                     for (int WeightIdx = 0; WeightIdx < newWeights.size(); WeightIdx++)
                     {
                         int weightCount = newWeights.size();
                         double oldW = newWeights[WeightIdx];
-
                         double newWeight = oldW - learning_rate * hiddenLayerGradients[Layeridx][PercIdx * weightCount + WeightIdx];
                         newWeights[WeightIdx] = newWeight;
                     }

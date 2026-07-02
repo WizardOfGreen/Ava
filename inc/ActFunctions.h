@@ -17,6 +17,11 @@ public:
         double res = x * (1 - x);
         return res;
     }
+    double Derivative(double a)
+    {
+        double res = a * (1 - a);
+        return res;
+    }
 };
 
 class ReLU : public ActivationFunction
@@ -31,6 +36,12 @@ public:
     {
         double x = this->activate(a);
         return x > 0.0 ? 1.0 : 0.0;
+    }
+
+    double Derivative(double a)
+    {
+        return a > 0.0 ? 1.0 : 0.0;
+        ;
     }
 };
 
@@ -61,11 +72,17 @@ public:
         return res;
     }
 
-    // Error is within 6 decimal points 
+    // Error is within 6 decimal points
     double activateDerivative(double a)
     {
         double x = this->activate(a);
-        double res = 1 -  pow (x , 2) ; 
+        double res = 1 - pow(x, 2);
+        return res;
+    }
+
+    double Derivative(double a)
+    {
+        double res = 1 - pow(a, 2);
         return res;
     }
 };

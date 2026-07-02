@@ -18,6 +18,12 @@ public:
         res /= size;
         return res;
     }
+    double calculateLoss2(double predicted, double trueval)
+    {
+        double res = 0;
+        res = 0.5 * pow((trueval - predicted), 2);
+        return res;
+    }
 };
 
 class MSE2 : public LossFunction
@@ -34,7 +40,7 @@ public:
     double calculateLoss2(double predicted, double trueval)
     {
         double res = 0;
-        res = predicted - trueval;
+        res = 0.5 * pow((trueval - predicted), 2);
         return res;
     }
 };
@@ -76,7 +82,7 @@ class BookLoss : public LossFunction
 public:
     double calculateLoss(std::vector<double> predicted, std::vector<double> trueval)
     {
-        return 0.00 ;
+        return 0.00;
     }
     double calculateLoss2(double predicted, double trueval)
     {
