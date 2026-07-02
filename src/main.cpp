@@ -78,7 +78,7 @@ void SingleLayerBP()
     N.setInputsLayer(inp[0]);
     N.FeedForward();
 
-    N.PrintOutInfo() ; 
+    N.PrintOutInfo();
 
     std::cout << "OUTPUT AFTER BACKPROPOGATION\n";
 
@@ -92,7 +92,7 @@ void SingleLayerBP()
 
 void MultipleHiddenLayers()
 {
-    NeuralNetwork N;                 // 0 Bias and 1 Learning Rate
+    NeuralNetwork N;                 // 1 Bias and 1 Learning Rate
     N.AssignLossFunction(new MSE()); // Change this later
     std::vector<std::vector<double>> inp = {{0.35, 0.7}};
     std::vector<std::vector<double>> out = {{0.5, 0.7}};
@@ -124,16 +124,19 @@ void MultipleHiddenLayers()
 
     N.setInputsLayer(inp[0]);
     N.FeedForward();
-    std::cout << "Output Results :\n";
+    std::cout << "OUTPUT RESULTS BEFORE BACKPROPAGATION :\n";
+    N.PrintOutInfo();
+
     for (double D : N.getOutputs())
     {
         std::cout << D << std::endl;
     }
+    N.TrainNN(inp, out, 1, 0.1);
 
-    N.TrainNN(inp, out, 10000, 0.1);
+    std::cout << "OUTPUT RESULTS AFTER BACKPROPAGATION :\n";
+    N.PrintOutInfo();
 
     N.setInputsLayer(inp[0]);
-    std::cout << "Output Results :\n";
     for (double D : N.getOutputs())
     {
         std::cout << D << std::endl;
@@ -410,8 +413,8 @@ void ActivationTests()
 
 int main()
 {
-    SingleLayerBP();
-    // MultipleHiddenLayers();
+    // SingleLayerBP();
+    MultipleHiddenLayers();
     // XORSolved() ;
     // XORTraining();
     // LossFunctionTests();
