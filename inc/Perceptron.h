@@ -27,8 +27,8 @@ public:
 
     void setActFunc(ActivationFunction *a);
     ActivationFunction * getAct() ; 
-    double CalcY();
     double returnNet() ; 
+    double retAct() ; 
 
     void printY()
     {
@@ -54,7 +54,6 @@ public:
     std::vector<double> returnWeights() ; 
     std::vector<double> returnInputs() ; 
     double returnBias() ; 
-
 
 };
 

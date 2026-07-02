@@ -42,7 +42,7 @@ public:
             {
                 std::cout << "OUTPUT OF HIDDEN LAYER " << i << " AND PERCEPTRON " << j << std::endl;
                 HiddenLayers[i][j].printInp();
-                std::cout << HiddenLayers[i][j].CalcY() << std::endl;
+                std::cout << HiddenLayers[i][j].retAct() << std::endl;
                 std::cout << "END OF THIS PERCEPTON\n";
             }
         }

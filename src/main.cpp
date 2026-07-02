@@ -207,12 +207,12 @@ void LossFunctionTests()
 int main()
 {
     // SimpleBackPropogation();
-    MultipleHiddenLayers();
+    // MultipleHiddenLayers();
     // XORSolved() ;
     // XORTraining();
     // LossFunctionTests();
 
-    std::cout << "Stroking my shit clean off \n";
+    std::cout << "Program Ran Successfully\n";
     system("pause");
     system("cls");
     return 0;
