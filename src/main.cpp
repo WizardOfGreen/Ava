@@ -47,7 +47,7 @@ void XORSolved()
     }
 }
 
-void SimpleBackPropogation()
+void SingleLayerBP()
 {
     NeuralNetwork N;
     N.AssignLossFunction(new MSE());
@@ -410,7 +410,7 @@ void ActivationTests()
 
 int main()
 {
-    SimpleBackPropogation();
+    SingleLayerBP();
     // MultipleHiddenLayers();
     // XORSolved() ;
     // XORTraining();
