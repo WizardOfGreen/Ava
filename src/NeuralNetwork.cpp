@@ -89,13 +89,12 @@ void NeuralNetwork::FeedForward()
     }
 }
 
-void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const std::vector<std::vector<double>> &out, int epoch)
+void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const std::vector<std::vector<double>> &out, int epoch, double learning_rate)
 {
     int indexOfLastLayer = HiddenLayers.size() - 1;
     for (int i = 0; i < epoch; i++)
     {
         std::vector<double> outps;
-        double learning_rate = 0.1;
         for (int outInx = 0; outInx < out.size(); outInx++)
         {
 
@@ -183,10 +182,11 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
             {
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
                 {
-                    std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
                     double oldBias = HiddenLayers[Layeridx][PercIdx].returnBias();
                     double newBias = oldBias - learning_rate * hiddenLayerDeltas[Layeridx][PercIdx];
                     HiddenLayers[Layeridx][PercIdx].setBias(newBias);
+
+                    std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
 
                     for (int WeightIdx = 0; WeightIdx < newWeights.size(); WeightIdx++)
                     {
@@ -196,6 +196,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                         double newWeight = oldW - learning_rate * hiddenLayerGradients[Layeridx][PercIdx * weightCount + WeightIdx];
                         newWeights[WeightIdx] = newWeight;
                     }
+
                     HiddenLayers[Layeridx][PercIdx].setWeights(newWeights);
                 }
             }

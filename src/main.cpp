@@ -51,21 +51,18 @@ void SimpleBackPropogation()
 {
     NeuralNetwork N;
     N.AssignLossFunction(new MSE());
-    std::vector<std::vector<double>> inp = {{0.35, 0.7}};
-    std::vector<std::vector<double>> out = {{0.5}};
+    std::vector<std::vector<double>> inp = {{1.0 , 2.0}};
+    std::vector<std::vector<double>> out = {{1}};
 
-    N.addLayer(2, new Sigmoid());
     N.addLayer(1, new Sigmoid());
 
-    std::vector<double> firstWeights = {0.2, 0.2};
-    std::vector<double> secondWeights = {0.3, 0.3};
-    std::vector<double> thirdWeight = {0.3, 0.9};
+    std::vector<double> firstWeights = {0.5 , -0.3};
+    double b = 0.1 ; 
 
     N.setInputsLayer(inp[0]);
 
     N.setLayerWeights(0, 0, firstWeights);
-    N.setLayerWeights(0, 1, secondWeights);
-    N.setLayerWeights(1, 0, thirdWeight);
+    N.setLayerBias(0,0,b) ; 
 
     N.FeedForward();
 
@@ -77,7 +74,7 @@ void SimpleBackPropogation()
     std::cout << std::endl;
     std::cout << std::endl;
 
-    N.TrainNN(inp, out, 575 );
+    N.TrainNN(inp, out, 575 , 0.1);
 
     N.setInputsLayer(inp[0]);
     N.FeedForward();
@@ -131,7 +128,7 @@ void MultipleHiddenLayers()
         std::cout << D << std::endl;
     }
 
-    N.TrainNN(inp, out, 10000);
+    N.TrainNN(inp, out, 10000 , 0.1);
 
     N.setInputsLayer(inp[0]);
     std::cout << "Output Results :\n";
@@ -154,7 +151,7 @@ void XORTraining()
     N.setLayerWeights(0, 1, {-5.0, -5.0});
     N.setLayerWeights(1, 0, {7.5, 7.5});
 
-    N.TrainNN(inp, out, 16);
+    N.TrainNN(inp, out, 16 , 0.1);
     for (int i = 0; i < 4; i++)
     {
         N.setInputsLayer(inp[i]);
@@ -383,7 +380,7 @@ void TanHTest()
     ActivationFunction *act = new TanH();
     std::vector<double> inputs = {-5, -2, -1, 0, 1, 2, 5};
     std::vector<double> outputs = {-0.999909204, -0.964027580, -0.761594156, 0.000000000, 0.761594156, 0.964027580, 0.999909204};
-    std::vector<double> derivative = {0.000181575,0.070650825,0.419974342,1.000000000,0.419974342,0.070650825,0.000181575};
+    std::vector<double> derivative = {0.000181575, 0.070650825, 0.419974342, 1.000000000, 0.419974342, 0.070650825, 0.000181575};
 
     for (int i = 0; i < inputs.size(); i++)
     {

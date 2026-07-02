@@ -31,7 +31,7 @@ public:
     std::vector<double> CalcLayerOutputs(int index);
     void FeedForward();
 
-    void TrainNN(const std::vector<std::vector<double>>& inp, const std::vector<std::vector<double>>& out, int epoch);
+    void TrainNN(const std::vector<std::vector<double>> &inp, const std::vector<std::vector<double>> &out, int epoch , double learning_rate);
 
     std::vector<double> getOutputs();
 
