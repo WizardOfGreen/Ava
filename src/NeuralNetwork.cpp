@@ -169,7 +169,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                             {
                                 sum = sum + HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx] * hiddenLayerDeltas[Layeridx + 1][i];
                             }
-                            double delta = derivative * sum;
+                            delta = derivative * sum;
                             hiddenLayerDeltas[Layeridx][PercIdx] = delta;
 
                             for (int i = 0; i < HiddenLayers[Layeridx - 1].size(); i++)
@@ -189,7 +189,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                             {
                                 sum = sum + HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx] * hiddenLayerDeltas[Layeridx + 1][i];
                             }
-                            double delta = derivative * sum;
+                            delta = derivative * sum;
                             hiddenLayerDeltas[Layeridx][PercIdx] = delta;
 
                             for (int i = 0; i < this->InputLayer.size(); i++)

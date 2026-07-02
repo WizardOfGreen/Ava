@@ -149,11 +149,16 @@ void XORTraining()
     N.addLayer(2, new Sigmoid());
     N.addLayer(1, new Sigmoid());
 
-    N.setLayerWeights(0, 0, {5.0, 5.0});
-    N.setLayerWeights(0, 1, {-5.0, -5.0});
-    N.setLayerWeights(1, 0, {7.5, 7.5});
+    N.setLayerWeights(0, 0, {-0.5, 0.3});
+    N.setLayerWeights(0, 1, {0.1, -0.7});
+    N.setLayerWeights(1, 0, {0.4, -0.2});
 
-    N.TrainNN(inp, out, 1, 0.1);
+    N.setLayerBias(0, 0, -0.2);
+    N.setLayerBias(0, 1, 0.6);
+    N.setLayerBias(1, 0, 0.7);
+
+    N.TrainNN(inp, out, 2000 , 0.3);
+    N.PrintOutInfo() ; 
     for (int i = 0; i < 4; i++)
     {
         N.setInputsLayer(inp[i]);
@@ -430,9 +435,9 @@ void singlePerceptronTest()
 int main()
 {
     // SingleLayerBP();
-    MultipleHiddenLayers();
+    // MultipleHiddenLayers();
     // XORSolved() ;
-    // XORTraining();
+    XORTraining();
     // LossFunctionTests();
     // FeedForwardTest();
     // ActivationTests();
