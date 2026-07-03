@@ -137,19 +137,20 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                 {
                     if (Layeridx == indexOfLastLayer && indexOfLastLayer != 0 )
                     {
+                        hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
                         for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
                         {
                             resPast = HiddenLayers[Layeridx - 1][WeightIdx].retAct() ; 
-                            hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
                             weightGradients[Layeridx][PercIdx][WeightIdx] = resPast * outputDeltas[PercIdx];
                         }
                     }
                     else if (indexOfLastLayer == 0)
                     {
+                        hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
+
                         for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
                         {
                             resPast = this->InputLayer[WeightIdx] ; 
-                            hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
                             weightGradients[Layeridx][PercIdx][WeightIdx] = resPast * outputDeltas[PercIdx];
                         }
                     }
@@ -159,7 +160,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                         for (int i = 0; i < HiddenLayers[Layeridx + 1].size(); i++)
                             sum += HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx] * hiddenLayerDeltas[Layeridx + 1][i];
 
-                        double derivative = this->Layer_Activations[Layeridx]->Derivative(this->Layer_Activations[Layeridx]->activate(HiddenLayers[Layeridx][PercIdx].returnNet()));
+                        double derivative = this->Layer_Activations[Layeridx]->Derivative(HiddenLayers[Layeridx][PercIdx].retAct());
                         delta = derivative * sum;
                         hiddenLayerDeltas[Layeridx][PercIdx] = delta;
                         int size = ((Layeridx == 0) ? this->InputLayer.size() : HiddenLayers[Layeridx - 1].size());
