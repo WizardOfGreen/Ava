@@ -64,30 +64,13 @@ void SingleLayerBP()
     N.setLayerWeights(0, 0, firstWeights);
     N.setLayerBias(0, 0, b);
 
-    N.FeedForward();
-
-    std::cout << "OUTPUT BEFORE BACKPROPOGATION\n";
-    for (double d : N.getOutputs())
-    {
-        std::cout << d << " ";
-    }
-    std::cout << std::endl;
+    N.PrintPredictionInfo(inp, out);
+    N.PrintOutInfo();
 
     N.TrainNN(inp, out, 1, 0.1);
 
-    N.setInputsLayer(inp[0]);
-    N.FeedForward();
-
+    N.PrintPredictionInfo(inp, out);
     N.PrintOutInfo();
-
-    std::cout << "OUTPUT AFTER BACKPROPOGATION\n";
-
-    for (double d : N.getOutputs())
-    {
-        std::cout << d << " ";
-    }
-
-    std::cout << std::endl;
 }
 
 void MultipleHiddenLayers()
@@ -96,6 +79,7 @@ void MultipleHiddenLayers()
     N.AssignLossFunction(new MSE()); // Change this later
     std::vector<std::vector<double>> inp = {{0.35, 0.7}};
     std::vector<std::vector<double>> out = {{0.5, 0.7}};
+    // N.getOutputs() -> Returns std::vector<double>
 
     N.addLayer(2, new Sigmoid()); // Hidden Layer 1
     N.addLayer(2, new Sigmoid()); // Hidden Layer 2
@@ -119,24 +103,13 @@ void MultipleHiddenLayers()
     N.setLayerWeights(2, 0, fifthWeight);
     N.setLayerWeights(2, 1, sixthWeight);
 
-    N.setInputsLayer(inp[0]);
-    N.FeedForward();
-    std::cout << "OUTPUT RESULTS BEFORE BACKPROPAGATION :\n";
+    N.PrintPredictionInfo(inp, out);
     N.PrintOutInfo();
-    std::cout << "Output\n";
-    for (double D : N.getOutputs())
-    {
-        std::cout << D << std::endl;
-    }
+
     N.TrainNN(inp, out, 1, 0.1);
 
-    std::cout << "OUTPUT RESULTS AFTER BACKPROPAGATION :\n";
+    N.PrintPredictionInfo(inp, out);
     N.PrintOutInfo();
-    std::cout << "Output\n";
-    for (double D : N.getOutputs())
-    {
-        std::cout << D << std::endl;
-    }
 }
 
 void XORTraining()
@@ -157,16 +130,13 @@ void XORTraining()
     N.setLayerBias(0, 1, 0.6);
     N.setLayerBias(1, 0, 0.7);
 
-    N.TrainNN(inp, out, 10000 , 0.1);
-    N.PrintOutInfo() ; 
-    for (int i = 0; i < 4; i++)
-    {
-        N.setInputsLayer(inp[i]);
-        N.FeedForward();
+    N.PrintPredictionInfo(inp, out);
+    N.PrintOutInfo();
 
-        std::cout << "Inputs :" << inp[i][0] << " " << inp[i][1] << std::endl;
-        std::cout << "Outputs:" << N.getOutputs()[0] << std::endl;
-    }
+    N.TrainNN(inp, out, 10000, 0.1);
+
+    N.PrintPredictionInfo(inp, out);
+    N.PrintOutInfo();
 }
 
 void MSETest()
@@ -434,7 +404,7 @@ void singlePerceptronTest()
 
 int main()
 {
-    SingleLayerBP();
+    // SingleLayerBP();
     // MultipleHiddenLayers();
     // XORSolved() ;
     XORTraining();

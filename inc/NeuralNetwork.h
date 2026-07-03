@@ -3,6 +3,8 @@
 
 #include "Perceptron.h"
 #include "LossFunctions.h"
+#include <iomanip>
+#include <sstream>
 
 class NeuralNetwork
 {
@@ -36,27 +38,98 @@ public:
     std::vector<double> getOutputs();
     void PrintOutInfo()
     {
-        std::cout << "Layer\tPercep\tBias\t\tWeight\t\t\tNetOutput\tActivatedOutput\t\n";
+        std::cout << std::fixed << std::setprecision(5);
+
+        std::cout << std::left
+                  << std::setw(8) << "Layer"
+                  << std::setw(10) << "Percep"
+                  << std::setw(12) << "Bias"
+                  << std::setw(30) << "Weights"
+                  << std::setw(15) << "NetOutput"
+                  << "ActivatedOutput\n";
+
+        std::cout << std::string(90, '-') << '\n';
+
         for (int Layeridx = 0; Layeridx < HiddenLayers.size(); Layeridx++)
         {
-            std::cout << Layeridx << "\t";
             for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
             {
-                std::cout << PercIdx << "\t";
-                std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
+                std::vector<double> weights = HiddenLayers[Layeridx][PercIdx].returnWeights();
 
-                std::cout << HiddenLayers[Layeridx][PercIdx].returnBias() << "\t";
-                for (int WeightIdx = 0; WeightIdx < newWeights.size(); WeightIdx++)
+                std::cout << std::left
+                          << std::setw(8) << Layeridx
+                          << std::setw(10) << PercIdx
+                          << std::setw(12) << HiddenLayers[Layeridx][PercIdx].returnBias();
+
+                // Print weights without a trailing comma
+                std::ostringstream weightStream;
+                for (size_t i = 0; i < weights.size(); i++)
                 {
-                    std::cout << newWeights[WeightIdx] << ",";
+                    if (i != 0)
+                        weightStream << ", ";
+
+                    weightStream << weights[i];
                 }
-                std::cout << "\t";
-                std::cout << HiddenLayers[Layeridx][PercIdx].returnNet() << "\t";
-                std::cout << HiddenLayers[Layeridx][PercIdx].retAct() ;
-                std::cout << std::endl << "\t" ;
+
+                std::cout << std::setw(30) << weightStream.str()
+                          << std::setw(15) << HiddenLayers[Layeridx][PercIdx].returnNet()
+                          << HiddenLayers[Layeridx][PercIdx].retAct()
+                          << '\n';
             }
-            std::cout << std::endl ; 
         }
+    }
+
+    void PrintPredictionInfo(std::vector<std::vector<double>> &inp,
+                             std::vector<std::vector<double>> &expected)
+    {
+        std::cout << std::fixed << std::setprecision(5);
+
+        std::cout << "\n================ Prediction Results ================\n\n";
+
+        for (size_t sample = 0; sample < inp.size(); sample++)
+        {
+            setInputsLayer(inp[sample]);
+            FeedForward();
+
+            std::vector<double> outputs = getOutputs();
+
+            std::cout << "Sample " << sample << '\n';
+
+            // Input
+            std::cout << std::setw(18) << std::left << "Input:";
+            for (size_t i = 0; i < inp[sample].size(); i++)
+            {
+                if (i != 0)
+                    std::cout << ", ";
+
+                std::cout << inp[sample][i];
+            }
+            std::cout << '\n';
+
+            // Expected Output
+            std::cout << std::setw(18) << std::left << "Expected Output:";
+            for (size_t i = 0; i < expected[sample].size(); i++)
+            {
+                if (i != 0)
+                    std::cout << ", ";
+
+                std::cout << expected[sample][i];
+            }
+            std::cout << '\n';
+
+            // Actual Output
+            std::cout << std::setw(18) << std::left << "Network Output:";
+            for (size_t i = 0; i < outputs.size(); i++)
+            {
+                if (i != 0)
+                    std::cout << ", ";
+
+                std::cout << outputs[i];
+            }
+            std::cout << "\n\n";
+        }
+
+        std::cout << "====================================================\n";
     }
 
     void KnownXORAnswer()
