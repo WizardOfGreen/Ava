@@ -141,7 +141,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                 {
                     for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
                     {
-                        if (indexOfLastLayer == 0) // Works in One Case
+                        if (indexOfLastLayer == 0) // Works in One Tested Case
                         {
                             double Inp = this->InputLayer[WeightIdx];
                             double w = HiddenLayers[Layeridx][PercIdx].returnWeights()[WeightIdx];
