@@ -403,7 +403,7 @@ int main()
     // Neural Networks :                        
     // =======================================  
     // SingleLayerBP();                         // 1 Layer , 2 Inputs , 2 Output            
-    // MultipleHiddenLayers();                  // 3 Layers , 3 Inputs , 2 Outputs          
+    MultipleHiddenLayers();                  // 3 Layers , 3 Inputs , 2 Outputs          
     // XORTraining();                           // 1 Layers , 2 Inputs ,1 Output.           
     // XORSolved() ;                            // Solved Problem To Test Feed Forwarding.  
     // FeedForwardTest();                       // Tests Feed Forward Pass                  

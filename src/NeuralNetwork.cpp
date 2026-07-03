@@ -61,7 +61,6 @@ std::vector<double> NeuralNetwork::CalcLayerOutputs(int index)
     std::vector<double> ret;
     if (index >= this->HiddenLayers.size())
     {
-        std::cout << "Index is larger as Hidden layer\n";
         return ret;
     }
 
@@ -77,7 +76,6 @@ void NeuralNetwork::FeedForward()
 {
     if (this->HiddenLayers.size() <= 0)
     {
-        std::cout << "No Hidden Layers Detected\n";
         return;
     }
 
@@ -92,18 +90,23 @@ void NeuralNetwork::FeedForward()
 void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const std::vector<std::vector<double>> &out, int epoch, double learning_rate)
 {
     int indexOfLastLayer = HiddenLayers.size() - 1;
+    std::vector<double> outputDeltas;
+    std::vector<std::vector<double>> hiddenLayerDeltas;
+    std::vector<std::vector<std::vector<double>>> weightGradients;
+    std::vector<double> outps;
+
     for (int i = 0; i < epoch; i++)
     {
-        std::vector<double> outps;
         for (int outInx = 0; outInx < out.size(); outInx++)
         {
+            outps.clear();
+            hiddenLayerDeltas.clear() ; 
+            weightGradients.clear() ; 
+            outputDeltas.clear() ; 
+
             setInputsLayer(inp[outInx]);
             FeedForward();
             outps = getOutputs();
-
-            std::vector<double> outputDeltas;
-            std::vector<std::vector<double>> hiddenLayerDeltas;
-            std::vector<std::vector<std::vector<double>>> weightGradients;
 
             double delta = 0;
 
@@ -135,22 +138,22 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
             {
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
                 {
-                    if (Layeridx == indexOfLastLayer && indexOfLastLayer != 0 )
+                    if (Layeridx == indexOfLastLayer && indexOfLastLayer != 0) // Only triggers on last Layer and NN is not a single layer
                     {
                         hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
                         for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
                         {
-                            resPast = HiddenLayers[Layeridx - 1][WeightIdx].retAct() ; 
+                            resPast = HiddenLayers[Layeridx - 1][WeightIdx].retAct();
                             weightGradients[Layeridx][PercIdx][WeightIdx] = resPast * outputDeltas[PercIdx];
                         }
                     }
-                    else if (indexOfLastLayer == 0)
+                    else if (indexOfLastLayer == 0) // Triggers if NN is a single Layer
                     {
                         hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
 
                         for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
                         {
-                            resPast = this->InputLayer[WeightIdx] ; 
+                            resPast = this->InputLayer[WeightIdx];
                             weightGradients[Layeridx][PercIdx][WeightIdx] = resPast * outputDeltas[PercIdx];
                         }
                     }
@@ -169,9 +172,9 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                             resPast = ((Layeridx == 0) ? this->InputLayer[i] : HiddenLayers[Layeridx - 1][i].retAct());
                             weightGradients[Layeridx][PercIdx][i] = resPast * delta;
                         }
-                    }
-                }
-            } // End of ERROR COMPUTING
+                    } // If Statements to use specific code blocks for certain Layer Indexes
+                } // Perceptron Loop
+            } // Layer Loop
 
             for (int Layeridx = 0; Layeridx <= indexOfLastLayer; Layeridx++)
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
