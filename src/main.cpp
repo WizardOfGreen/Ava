@@ -434,7 +434,7 @@ void singlePerceptronTest()
 
 int main()
 {
-    // SingleLayerBP();
+    SingleLayerBP();
     // MultipleHiddenLayers();
     // XORSolved() ;
     XORTraining();

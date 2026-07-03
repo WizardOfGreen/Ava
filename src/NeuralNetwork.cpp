@@ -99,7 +99,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
         {
             setInputsLayer(inp[outInx]);
             FeedForward();
-            outps = getOutputs(); // Returns the Activated Output i.e Predicted y.
+            outps = getOutputs();
 
             std::vector<double> outputDeltas;
             std::vector<std::vector<double>> hiddenLayerDeltas;
@@ -111,8 +111,8 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
 
             for (int idx = 0; idx < out[outInx].size(); idx++)
             {
-                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[indexOfLastLayer])->Derivative(outps[idx]); // Works
-                outputDeltas.push_back(delta);                                                                           // Delta for Output Perceptron 0 and 1
+                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[indexOfLastLayer])->Derivative(outps[idx]);
+                outputDeltas.push_back(delta);
             }
 
             for (int Layeridx = 0; Layeridx < HiddenLayers.size(); Layeridx++)
@@ -124,82 +124,65 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                     hiddenLayerDeltas[Layeridx].push_back(double());
                     weightGradients[Layeridx].push_back(std::vector<double>());
                     for (int weightIdx = 0; weightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); weightIdx++)
-                    {
                         weightGradients[Layeridx][PercIdx].push_back(double());
-                    }
                 }
             }
 
-            double Err = 0;
-            double grad;
-            double resPast;
+            double grad = 0;
+            double resPast = 0;
 
             for (int Layeridx = indexOfLastLayer; Layeridx >= 0; Layeridx--)
             {
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
                 {
-                    for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
+                    if (Layeridx == indexOfLastLayer && indexOfLastLayer != 0 )
                     {
-                        if (Layeridx == indexOfLastLayer || indexOfLastLayer == 0) // EDGE CASE : Hidden layer is Output Layer
+                        for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
                         {
-                            double PerRes = 0 ; 
-                            if (Layeridx == indexOfLastLayer)
-                                PerRes = HiddenLayers[Layeridx - 1][WeightIdx].retAct(); // Return Activated Value
-                            else if (indexOfLastLayer == 0)
-                                PerRes = this->InputLayer[WeightIdx];
-
-                            double Err = PerRes * outputDeltas[PercIdx];
+                            resPast = HiddenLayers[Layeridx - 1][WeightIdx].retAct() ; 
                             hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
-                            weightGradients[Layeridx][PercIdx][WeightIdx] = Err;
+                            weightGradients[Layeridx][PercIdx][WeightIdx] = resPast * outputDeltas[PercIdx];
                         }
-
-                        else if (Layeridx == 0 || Layeridx != 0)
+                    }
+                    else if (indexOfLastLayer == 0)
+                    {
+                        for (int WeightIdx = 0; WeightIdx < HiddenLayers[Layeridx][PercIdx].returnWeights().size(); WeightIdx++)
                         {
-                            double act = HiddenLayers[Layeridx][PercIdx].returnNet();
-                            double d = this->Layer_Activations[Layeridx]->activate(act);
-                            double derivative = this->Layer_Activations[Layeridx]->Derivative(d);
-                            double sum = 0;
+                            resPast = this->InputLayer[WeightIdx] ; 
+                            hiddenLayerDeltas[Layeridx][PercIdx] = outputDeltas[PercIdx];
+                            weightGradients[Layeridx][PercIdx][WeightIdx] = resPast * outputDeltas[PercIdx];
+                        }
+                    }
+                    else
+                    {
+                        double sum = 0;
+                        for (int i = 0; i < HiddenLayers[Layeridx + 1].size(); i++)
+                            sum += HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx] * hiddenLayerDeltas[Layeridx + 1][i];
 
-                            for (int i = 0; i < HiddenLayers[Layeridx + 1].size(); i++)
-                            {
-                                sum += HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx] * hiddenLayerDeltas[Layeridx + 1][i];
-                            }
-                            delta = derivative * sum;
-                            hiddenLayerDeltas[Layeridx][PercIdx] = delta;
-
-                            if (Layeridx == 0)
-                                for (int i = 0; i < this->InputLayer.size(); i++)
-                                {
-                                    resPast = this->InputLayer[i];
-                                    grad = resPast * delta;
-                                    weightGradients[Layeridx][PercIdx][i] = grad;
-                                }
-
-                            if (Layeridx != 0)
-                                for (int i = 0; i < HiddenLayers[Layeridx - 1].size(); i++)
-                                {
-                                    resPast = HiddenLayers[Layeridx - 1][i].retAct();
-                                    grad = resPast * delta;
-                                    weightGradients[Layeridx][PercIdx][i] = grad;
-                                }
+                        double derivative = this->Layer_Activations[Layeridx]->Derivative(this->Layer_Activations[Layeridx]->activate(HiddenLayers[Layeridx][PercIdx].returnNet()));
+                        delta = derivative * sum;
+                        hiddenLayerDeltas[Layeridx][PercIdx] = delta;
+                        int size = ((Layeridx == 0) ? this->InputLayer.size() : HiddenLayers[Layeridx - 1].size());
+                        for (int i = 0; i < size; i++)
+                        {
+                            resPast = ((Layeridx == 0) ? this->InputLayer[i] : HiddenLayers[Layeridx - 1][i].retAct());
+                            weightGradients[Layeridx][PercIdx][i] = resPast * delta;
                         }
                     }
                 }
             } // End of ERROR COMPUTING
 
             for (int Layeridx = 0; Layeridx <= indexOfLastLayer; Layeridx++)
-            {
                 for (int PercIdx = 0; PercIdx < HiddenLayers[Layeridx].size(); PercIdx++)
                 {
                     double oldBias = HiddenLayers[Layeridx][PercIdx].returnBias();
                     double newBias = oldBias - learning_rate * hiddenLayerDeltas[Layeridx][PercIdx];
-
                     HiddenLayers[Layeridx][PercIdx].setBias(newBias);
+
                     std::vector<double> newWeights = HiddenLayers[Layeridx][PercIdx].returnWeights();
 
                     for (int WeightIdx = 0; WeightIdx < newWeights.size(); WeightIdx++)
                     {
-                        int weightCount = newWeights.size();
                         double oldW = newWeights[WeightIdx];
                         double newWeight = oldW - learning_rate * weightGradients[Layeridx][PercIdx][WeightIdx];
                         newWeights[WeightIdx] = newWeight;
@@ -207,7 +190,6 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
 
                     HiddenLayers[Layeridx][PercIdx].setWeights(newWeights);
                 }
-            }
         }
     }
 }
