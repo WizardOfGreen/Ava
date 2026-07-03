@@ -9,7 +9,6 @@
 class NeuralNetwork
 {
 private:
-    /* data */
     std::vector<double> InputLayer;
     std::vector<std::vector<Perceptron>> HiddenLayers;
     std::vector<ActivationFunction *> Layer_Activations;

@@ -77,7 +77,7 @@ void MultipleHiddenLayers()
 {
     NeuralNetwork N;                 // Learning Rate 0.1 , Default Bias 0.5 on Trainable Bias.
     N.AssignLossFunction(new MSE()); // Change this later
-    std::vector<std::vector<double>> inp = {{0.35, 0.7}};
+    std::vector<std::vector<double>> inp = {{0.35, 0.7, 0.6}};
     std::vector<std::vector<double>> out = {{0.5, 0.7}};
     // N.getOutputs() -> Returns std::vector<double>
 
@@ -85,16 +85,14 @@ void MultipleHiddenLayers()
     N.addLayer(2, new Sigmoid()); // Hidden Layer 2
     N.addLayer(2, new Sigmoid()); // Hidden Layer 3
 
-    std::vector<double> firstWeights = {0.2, 0.2};  // Hidden Layer 1
-    std::vector<double> secondWeights = {0.3, 0.3}; // Hidden Layer 1
+    std::vector<double> firstWeights = {0.2, 0.2, 0, 7}; // Hidden Layer 1
+    std::vector<double> secondWeights = {0.3, 0.3, 0.6}; // Hidden Layer 1
 
     std::vector<double> thirdWeight = {0.3, 0.9};  // Hidden Layer 2
     std::vector<double> fourthWeight = {0.2, 0.1}; // Hidden Layer 2
 
     std::vector<double> fifthWeight = {0.7, 0.55}; // Output Layer
     std::vector<double> sixthWeight = {0.6, 0.35}; // Output Layer
-
-    N.setInputsLayer(inp[0]);
 
     N.setLayerWeights(0, 0, firstWeights);
     N.setLayerWeights(0, 1, secondWeights);
@@ -106,7 +104,7 @@ void MultipleHiddenLayers()
     N.PrintPredictionInfo(inp, out);
     N.PrintOutInfo();
 
-    N.TrainNN(inp, out, 1, 0.1);
+    N.TrainNN(inp, out, 5000, 0.1);
 
     N.PrintPredictionInfo(inp, out);
     N.PrintOutInfo();
@@ -401,14 +399,24 @@ void singlePerceptronTest()
 
 int main()
 {
-    // SingleLayerBP();
-    // MultipleHiddenLayers();
-    // XORSolved() ;
-    XORTraining();
-    // LossFunctionTests();
-    // FeedForwardTest();
-    // ActivationTests();
-    // singlePerceptronTest() ;
+    // =======================================  
+    // Neural Networks :                        
+    // =======================================  
+    // SingleLayerBP();                         // 1 Layer , 2 Inputs , 2 Output            
+    // MultipleHiddenLayers();                  // 3 Layers , 3 Inputs , 2 Outputs          
+    // XORTraining();                           // 1 Layers , 2 Inputs ,1 Output.           
+    // XORSolved() ;                            // Solved Problem To Test Feed Forwarding.  
+    // FeedForwardTest();                       // Tests Feed Forward Pass                  
+    // =======================================  
+    // Function Tests :                         
+    // =======================================  
+    // LossFunctionTests();                     
+    // ActivationTests();                       
+    // =======================================  
+    // Perceptron Tests :                       
+    // =======================================  
+    // singlePerceptronTest() ;                 
+    // =======================================  
 
     std::cout << "Program Ran Successfully\n";
     system("pause");
