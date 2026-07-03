@@ -1,5 +1,6 @@
-# CppMatrixes
-My Cpp Matrixes file
+# Library for NN
+Ava
 
-JUST SAVE THE FILE OR RUN THIS COMMAND TO GENERATE BUILD FOLDER
-cmake -S . -B Build -G "MINGW Makefiles"
+This is a small library containing the funcitonality of simple neural networks created by me .
+
+Updating this library to add other forms of functionality , currently working on testing and optimizations. Later I will shift my focus to optimizers and more loss functions
