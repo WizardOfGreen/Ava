@@ -130,9 +130,6 @@ void XORTraining()
     N.setLayerBias(0, 1, 0.6);
     N.setLayerBias(1, 0, 0.7);
 
-    N.PrintPredictionInfo(inp, out);
-    N.PrintOutInfo();
-
     N.TrainNN(inp, out, 10000, 0.1);
 
     N.PrintPredictionInfo(inp, out);
