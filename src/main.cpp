@@ -157,7 +157,7 @@ void XORTraining()
     N.setLayerBias(0, 1, 0.6);
     N.setLayerBias(1, 0, 0.7);
 
-    N.TrainNN(inp, out, 2000 , 0.3);
+    N.TrainNN(inp, out, 10000 , 0.1);
     N.PrintOutInfo() ; 
     for (int i = 0; i < 4; i++)
     {
@@ -445,6 +445,6 @@ int main()
 
     std::cout << "Program Ran Successfully\n";
     system("pause");
-    system("cls");
+
     return 0;
 }
