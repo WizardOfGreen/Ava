@@ -66,8 +66,12 @@ public:
     double activate(double x)
     {
         double r1, r2;
-        r1 = pow(e, 2 * x) - 1;
-        r2 = pow(e, 2 * x) + 1;
+
+        double x1 = pow ( e , x) ; 
+        double x2 = pow( e , (x * -1) ) ; 
+
+        r1 = x1 - x2 ; 
+        r2 = x1 + x2 ;
         double res = r1 / r2;
         return res;
     }

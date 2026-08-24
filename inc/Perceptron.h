@@ -23,37 +23,24 @@ private:
 public:
     Perceptron();
     Perceptron(ActivationFunction *act);
-    ~Perceptron();
 
     void setActFunc(ActivationFunction *a);
-    ActivationFunction * getAct() ; 
-    double returnNet() ; 
-    double retAct() ; 
+    ActivationFunction *getAct();
 
-    void printY()
-    {
-        std::cout << act->activate(this->Outputs) << std::endl;
-    }
-
-    void printInp() 
-    {
-         std::cout << "INPUTS\n" ;
-        for ( double d : this->Inputs )
-        {
-            std::cout << d << " " ; 
-        }
-        std::cout << std::endl ; 
-    }
+    double retAct();
+    double returnNet();
 
     void setInp(const std::vector<double> &inp);
     void setWeights(std::vector<double> w);
     void setBias(const double b);
 
-    void TrainPerceptron(std::vector<double> inp, double out) ; 
-    std::vector<double> returnWeights() ; 
-    std::vector<double> returnInputs() ; 
-    double returnBias() ; 
+    void TrainPerceptron(std::vector<double> inp, double out);
 
+    std::vector<double> returnWeights();
+    std::vector<double> returnInputs();
+    double returnBias();
+
+    ~Perceptron();
 };
 
 #endif
