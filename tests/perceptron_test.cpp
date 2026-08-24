@@ -8,9 +8,5 @@ int main()
 {
     bool failed = false;
 
-    Perceptron P ; 
-
-
-
     return failed;
 }
