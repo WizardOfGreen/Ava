@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 
-#include "Matrix.h"
 #include "ActFunctions.h"
 #include "LossFunctions.h"
 #include "Perceptron.h"
@@ -161,8 +160,8 @@ void MSETest()
     std::cout << (new RootMSE())->calculateLoss(predValues, trueValues);
     std::cout << "\n-------------------\n";
 
-    std::cout << "Root Mean Squared Error : ";
-    std::cout << (new AbsMSE())->calculateLoss(predValues, trueValues);
+    std::cout << "MAE Squared Error : ";
+    std::cout << (new MAE())->calculateLoss(predValues, trueValues);
     std::cout << "\n-------------------\n";
 }
 

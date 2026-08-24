@@ -7,6 +7,5 @@
 int main()
 {
     bool failed = false;
-
     return failed;
 }

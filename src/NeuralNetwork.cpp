@@ -110,8 +110,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
 
             double delta = 0;
 
-            // std::cout << "LOSS RESULTS : " << this->lossFunc->calculateLoss2(outps[0], out[outInx][0]) << std::endl;
-
+            // Check This One Later
             for (int idx = 0; idx < out[outInx].size(); idx++)
             {
                 delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[indexOfLastLayer])->Derivative(outps[idx]);

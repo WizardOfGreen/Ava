@@ -55,8 +55,8 @@ public:
 
     double activateDerivative(double a)
     {
-        double x = this->activate(a);
-        return x > 0.0 ? 1.0 : 0.0;
+        double res = 1 / ( 1 + pow(e , (-1 * a))) ; 
+        return res;
     }
 };
 
@@ -76,7 +76,6 @@ public:
         return res;
     }
 
-    // Error is within 6 decimal points
     double activateDerivative(double a)
     {
         double x = this->activate(a);
