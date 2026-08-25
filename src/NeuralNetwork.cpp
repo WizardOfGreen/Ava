@@ -110,10 +110,10 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
 
             double delta = 0;
 
-            // Check This One Later
+            // Check This One Later / Appears to be a Sigmoid Derivative but has some neiche design choices
             for (int idx = 0; idx < out[outInx].size(); idx++)
             {
-                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[indexOfLastLayer])->Derivative(outps[idx]);
+                delta = (outps[idx] - out[outInx][idx]) * (Layer_Activations[indexOfLastLayer])->activateDerivative(Layer_Activations[indexOfLastLayer]->activate(out[outInx][idx]) ) ;
                 outputDeltas.push_back(delta);
             }
 
@@ -162,7 +162,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
                         for (int i = 0; i < HiddenLayers[Layeridx + 1].size(); i++)
                             sum += HiddenLayers[Layeridx + 1][i].returnWeights()[PercIdx] * hiddenLayerDeltas[Layeridx + 1][i];
 
-                        double derivative = this->Layer_Activations[Layeridx]->Derivative(HiddenLayers[Layeridx][PercIdx].retAct());
+                        double derivative = this->Layer_Activations[Layeridx]->pre_activation_derivative(HiddenLayers[Layeridx][PercIdx].retAct());
                         delta = derivative * sum;
                         hiddenLayerDeltas[Layeridx][PercIdx] = delta;
                         int size = ((Layeridx == 0) ? this->InputLayer.size() : HiddenLayers[Layeridx - 1].size());

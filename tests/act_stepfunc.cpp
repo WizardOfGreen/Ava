@@ -13,7 +13,7 @@ int main()
 
     ActivationFunction * stepfunc = new StepFunc ; 
 
-    for ( int i = 0 ; i < 2 ; i++)
+    for ( int i = 0 ; i < inp.size() ; i++)
     {
         out[i] = stepfunc->activate(inp[i]) ; 
 

@@ -15,7 +15,7 @@ public:
     // Active Derivative does not expect an activated value
     virtual double activateDerivative(double a) { return 0.0; };
     // Derivative expects an activated value
-    virtual double Derivative(double a) { return 0.0; };
+    virtual double pre_activation_derivative(double x) { return 0.0 ;} ; 
 };
 
 #endif
