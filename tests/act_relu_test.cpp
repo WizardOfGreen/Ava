@@ -10,12 +10,12 @@ int main()
     bool failed = false;
     ActivationFunction *relu = new ReLU();
 
-    std::vector<double> inp = { -3.7, 1} ; 
+    std::vector<double> inp = { -3.7 , 1 , 2} ; 
     std::vector<double> outAct = {0,0,0} ;
     std::vector<double> outDer = {0,0,0} ;  
 
-    std::vector<double> resAct = {0.594113663,-0.652706706,-0.10955847} ;
-    std::vector<double> resDer = {0.647028956,0.573973956,0.987996942} ; 
+    std::vector<double> resAct = {0,1,2} ;
+    std::vector<double> resDer = {0,1,1} ; 
 
     for ( int i = 0 ; i < inp.size() ; i++)
     {
