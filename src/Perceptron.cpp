@@ -9,7 +9,7 @@ Perceptron::Perceptron()
 
 Perceptron::Perceptron(ActivationFunction *act)
 {
-    this->act = act ; 
+    this->act = act;
 }
 
 Perceptron::~Perceptron()
@@ -23,7 +23,7 @@ void Perceptron::setActFunc(ActivationFunction *a)
 
 ActivationFunction *Perceptron::getAct()
 {
-    return this->act    ;
+    return this->act;
 }
 
 double Perceptron::returnNet()
@@ -36,13 +36,13 @@ double Perceptron::returnNet()
     }
     this->Outputs = res;
 
-    return res ;
+    return res;
 }
 
 double Perceptron::retAct()
 {
-    double res = returnNet() ; 
-    return this->act->activate(res) ;
+    double res = returnNet();
+    return this->act->activate(res);
 }
 
 void Perceptron::setInp(const std::vector<double> &inp)
@@ -58,10 +58,10 @@ void Perceptron::setInp(const std::vector<double> &inp)
 
 void Perceptron::setWeights(std::vector<double> w)
 {
-    this->Weights.clear() ; 
-    for ( double x: w)
+    this->Weights.clear();
+    for (double x : w)
     {
-        this->Weights.push_back(x) ; 
+        this->Weights.push_back(x);
     }
 }
 
@@ -70,52 +70,40 @@ void Perceptron::setBias(const double b)
     this->bias = b;
 }
 
-void Perceptron::TrainPerceptron(std::vector<double> inp, double out)
+void Perceptron::TrainPerceptron(double out, int epoch)
 {
-    this->Inputs.clear();
-    this->numInputs = inp.capacity();
-
-    for (double x : inp)
+    for (int i = 0; i < epoch; i++)
     {
-        this->Inputs.push_back(x);
-    }
+        double res = this->retAct() ; 
+        double err = out - res ;
 
-    double res = 0;
-    res = res + this->bias;
-    
-    for (int i = 0; i < this->numInputs; i++)
-    {
-        res = res + this->Inputs[i] * this->Weights[i];
-    }
+        if (err == 0)
+        {
+            return;
+        }
 
-    res = this->act->activate(res); // If res is >= 0 than return 1 , else return 0 ;
-    double err = out - res ;
+        for (int i = 0; i < this->Inputs.size(); i++)
+        {
+            this->Weights[i] = this->Weights[i] + rate * err * this->Inputs[i];
+        }
 
-    if (err == 0)
-    {
-        return;
+        this->bias = this->bias + err * rate * 1;
     }
-
-    for (int i = 0; i < this->Inputs.size(); i++)
-    {
-        this->Weights[i] = this->Weights[i] + rate * err * this->Inputs[i];
-    }
-    this->bias = this->bias + err * rate * 1;
 }
 
 std::vector<double> Perceptron::returnWeights()
 {
-    return this->Weights ;
+    return this->Weights;
 }
 
 std::vector<double> Perceptron::returnInputs()
 {
-    return this->Inputs ; 
+    return this->Inputs;
 }
 
 double Perceptron::returnBias()
 {
-    return this->bias ; 
+    return this->bias;
 }
 
 #endif

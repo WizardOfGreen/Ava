@@ -9,19 +9,6 @@
 
 Perceptron P;
 
-void runEpoch(std::vector<std::vector<double>> inp, std::vector<double> out, int amount)
-{
-    int i = 0;
-    while (i <= amount)
-    {
-        for (int j = 0; j < 4; j++)
-        {
-            P.TrainPerceptron(inp[j], out[j]);
-        }
-        i++;
-    }
-}
-
 void XORSolved()
 {
     NeuralNetwork N;
@@ -403,7 +390,7 @@ int main()
     // =======================================
     // SingleLayerBP();                         // 1 Layer , 2 Inputs , 2 Output
     // MultipleHiddenLayers();                     // 3 Layers , 3 Inputs , 2 Outputs
-    XORTraining();                           // 1 Layers , 2 Inputs ,1 Output.
+    // XORTraining();                           // 1 Layers , 2 Inputs ,1 Output.
     // XORSolved() ;                            // Solved Problem To Test Feed Forwarding.
     // FeedForwardTest();                       // Tests Feed Forward Pass
     // =======================================
@@ -418,7 +405,7 @@ int main()
     // std::cout << "Perceptron Test\n" ;
 
     // =======================================
-    // singlePerceptronTest() ;
+    singlePerceptronTest() ;
     // =======================================
 
     std::cout << "Program Ran Successfully\n";

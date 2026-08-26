@@ -52,3 +52,7 @@ add_test(NAME Loss_RootMSE COMMAND loss_rootmse)
 add_executable(loss_mae tests/loss_mae.cpp)
 target_include_directories(loss_mae PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 add_test(NAME Loss_MAE COMMAND loss_mae)
+
+add_executable(perc_test tests/perc_test.cpp src/Perceptron.cpp) 
+target_include_directories(perc_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
+add_test(NAME Perc_Test COMMAND perc_test)
