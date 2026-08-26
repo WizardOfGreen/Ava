@@ -21,9 +21,6 @@ private:
     double rate = 0.07;
 
 public:
-    /**
-     * Basic Perceptron Constructor
-     */
     Perceptron();
     Perceptron(ActivationFunction *act);
 
