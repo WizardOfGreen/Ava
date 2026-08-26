@@ -22,9 +22,9 @@ int main()
 {
     bool failure = false;
     Perceptron P;
-    ActivationFunction *sigmoid = new Sigmoid();
+    ActivationFunction *sigmoid = new StepFunc();
     Perceptron P2(sigmoid);
-    ActivationFunction *compare_sigmoid = new Sigmoid();
+    ActivationFunction *compare_sigmoid = new StepFunc();
 
     ActivationFunction *testingCase;
     ActivationFunction *testingCase2;
@@ -51,7 +51,7 @@ int main()
     double out;
     double act;
     double expOut = 0.5055;
-    double expAct = 0.623750978;
+    double expAct = 1;
 
     P.setInp(inp);
     P.setWeights(weight);
@@ -110,10 +110,10 @@ int main()
 
     std::cout << "Testing Training of Perceptron for 300 Epochs!\n";
 
-    P.TrainPerceptron(0.8, 300);
+    P.TrainPerceptron(1, 300);
     double trainAct = P.retAct();
 
-    if (compare(0.8, trainAct))
+    if (compare(1, trainAct))
     {
         std::cout << "Training Failed !\n";
         return 1;

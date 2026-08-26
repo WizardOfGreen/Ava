@@ -56,3 +56,7 @@ add_test(NAME Loss_MAE COMMAND loss_mae)
 add_executable(perc_test tests/perc_test.cpp src/Perceptron.cpp) 
 target_include_directories(perc_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 add_test(NAME Perc_Test COMMAND perc_test)
+
+add_executable(nn_test tests/neural_net_test.cpp src/NeuralNetwork.cpp src/Perceptron.cpp)
+target_include_directories(nn_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
+add_test(NAME NN_Test COMMAND nn_test)

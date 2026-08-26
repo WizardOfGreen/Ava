@@ -4,7 +4,7 @@
 #include "NeuralNetwork.h"
 
 NeuralNetwork::NeuralNetwork()
-{
+{    
 }
 
 NeuralNetwork::~NeuralNetwork()
@@ -14,6 +14,11 @@ NeuralNetwork::~NeuralNetwork()
 void NeuralNetwork::AssignLossFunction(LossFunction *lossFunc)
 {
     this->lossFunc = lossFunc;
+}
+
+LossFunction * NeuralNetwork::ReturnLossFunction()
+{
+    return this->lossFunc ; 
 }
 
 void NeuralNetwork::setInputsLayer(const std::vector<double> &Inp)
@@ -200,6 +205,7 @@ void NeuralNetwork::TrainNN(const std::vector<std::vector<double>> &inp, const s
 std::vector<double> NeuralNetwork::getOutputs()
 {
     std::vector<double> out;
+    this->FeedForward() ; 
     int last = this->HiddenLayers.size() - 1;
     for (int i = 0; i < this->HiddenLayers[last].size(); i++)
     {
