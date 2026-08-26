@@ -85,7 +85,7 @@ public:
      * @param inp List of all the possible inputs , corresponds to the inp i.e NeuralNetworkResult(inp[2]) == out[2]
      * @param out List of all the possible outputs , corresponds to the inp i.e out[2] == NeuralNetworkResult(inp[2])
      * @param epoch Amount of times training will take place
-     * @param learning_rate Learning Rate . How rapid or slow the changes to the Neural Network will take place.
+     * @param learning_rate Learning Rate .How rapid or slow the changes to the Neural Network will take place.
      */
     void TrainNN(const std::vector<std::vector<double>> &inp, const std::vector<std::vector<double>> &out, int epoch, double learning_rate);
 

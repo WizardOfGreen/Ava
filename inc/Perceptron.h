@@ -21,6 +21,9 @@ private:
     double rate = 0.07;
 
 public:
+    /**
+     * Basic Perceptron Constructor
+     */
     Perceptron();
     Perceptron(ActivationFunction *act);
 
@@ -34,7 +37,7 @@ public:
     void setWeights(std::vector<double> w);
     void setBias(const double b);
 
-    void TrainPerceptron(double out , int epoch);
+    void TrainPerceptron(double out, int epoch);
 
     std::vector<double> returnWeights();
     std::vector<double> returnInputs();
