@@ -3,7 +3,7 @@
 
 This is a small library containing the functionality of simple neural networks created by myself .
 
-I am creating this Repo to learn more about Neural Networks and its mathematical formulas, thus the repo does not include any modules/libraries/imports to help with the design . Only libraries I am using is the standard <cmath> library for precise mathematical expressions.
+I am creating this Repo to learn more about Neural Networks and its mathematical formulas, thus the repo does not include any modules/libraries/imports to help with the design . THe only library I am using is the standard cmath library for precise mathematical expressions.
 
 Updating this library to add other forms of functionality .
 Currently Working on proper documentation and Testing Coverage for all functions.

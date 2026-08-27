@@ -3,8 +3,6 @@
 
 #include "Perceptron.h"
 #include "LossFunctions.h"
-#include <iomanip>
-#include <sstream>
 
 class NeuralNetwork
 {
