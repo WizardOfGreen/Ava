@@ -74,8 +74,8 @@ void Perceptron::TrainPerceptron(double out, int epoch)
 {
     for (int i = 0; i < epoch; i++)
     {
-        double res = this->retAct() ; 
-        double err = out - res ;
+        double res = this->retAct();
+        double err = out - res;
 
         if (err == 0)
         {
@@ -91,14 +91,24 @@ void Perceptron::TrainPerceptron(double out, int epoch)
     }
 }
 
-std::vector<double> Perceptron::returnWeights()
+std::vector<double> &Perceptron::returnWeights()
 {
-    return this->Weights;
+    std::vector<double> copy;
+    for (double x : this->Weights)
+    {
+        copy.push_back(x);
+    }
+    return copy;
 }
 
-std::vector<double> Perceptron::returnInputs()
+std::vector<double> &Perceptron::returnInputs()
 {
-    return this->Inputs;
+    std::vector<double> copy;
+    for (double x : this->Inputs)
+    {
+        copy.push_back(x);
+    }
+    return copy;
 }
 
 double Perceptron::returnBias()
