@@ -45,10 +45,6 @@ add_executable(loss_mse tests/loss_mse.cpp)
 target_include_directories(loss_mse PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 add_test(NAME Loss_MSE COMMAND loss_mse)
 
-add_executable(loss_rootmse tests/loss_rootmse.cpp)
-target_include_directories(loss_rootmse PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
-add_test(NAME Loss_RootMSE COMMAND loss_rootmse)
-
 add_executable(loss_mae tests/loss_mae.cpp)
 target_include_directories(loss_mae PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 add_test(NAME Loss_MAE COMMAND loss_mae)
@@ -60,3 +56,7 @@ add_test(NAME Perc_Test COMMAND perc_test)
 add_executable(nn_test tests/neural_net_test.cpp src/NeuralNetwork.cpp src/Perceptron.cpp)
 target_include_directories(nn_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
 add_test(NAME NN_Test COMMAND nn_test)
+
+add_executable(img_test tests/img_ext_test.cpp src/ImageExtractor.cpp)
+target_include_directories(img_test PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/inc)
+add_test(NAME IMG_test COMMAND img_test)

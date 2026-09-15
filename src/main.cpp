@@ -6,6 +6,7 @@
 #include "Perceptron.h"
 
 #include "NeuralNetwork.h"
+#include "ImageExtractor.h"
 
 void PrintFeedForwardResults(NeuralNetwork &N, std::vector<double> &inp1, std::vector<double> &out1)
 {
@@ -33,26 +34,8 @@ void PrintFeedForwardResults(NeuralNetwork &N, std::vector<double> &inp1, std::v
 
 int main()
 {
-    // =======================================
-    // Neural Networks :
-    // =======================================
-    // XORTraining();                           // 1 Layers , 2 Inputs ,1 Output.
-    // XORSolved() ;                            // Solved Problem To Test Feed Forwarding.
-    // FeedForwardTest();                       // Tests Feed Forward Pass
-    // =======================================
-    // Function Tests :
-    // =======================================
-    // LossFunctionTests();
-    // ActivationTests();
-    // =======================================
-    // Perceptron Tests :
-    // Perceptron P ;
-    // P.setInp( { 1 , 0 } ) ;
-    // std::cout << "Perceptron Test\n" ;
-
-    // =======================================
-    // singlePerceptronTest() ;
-    // =======================================
+    ImageExtractor img ; 
+    std::vector<std::vector<int>> x = img.ConvertImageToMatrix("dogs/GoldenRetriever/0EEGHVQ8Z263.jpg");
 
     std::cout << "Program Ran Successfully\n";
 
